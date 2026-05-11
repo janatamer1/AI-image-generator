@@ -1,23 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  --bg-primary: #030305;
-  --bg-secondary: #0a0a0f;
-  --bg-card: rgba(15, 15, 25, 0.6);
+  --bg-primary: #020617;
+  --bg-secondary: #0f172a;
+  --bg-card: rgba(30, 41, 59, 0.6);
   --bg-glass: rgba(255, 255, 255, 0.02);
   --border-light: rgba(255, 255, 255, 0.05);
-  --border-hover: rgba(255, 255, 255, 0.15);
+  --border-hover: rgba(147, 51, 234, 0.4);
 
-  --accent-cyan: #00f2fe;
-  --accent-purple: #4facfe;
-  --accent-magenta: #f093fb;
+  --accent-cyan: #a855f7;
+  --accent-purple: #9333ea;
+  --accent-magenta: #581c87;
 
-  --gradient-brand: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  --gradient-glow: linear-gradient(135deg, rgba(240, 147, 251, 0.4), rgba(245, 87, 108, 0.4));
-  --gradient-text: linear-gradient(to right, #f093fb, #f5576c);
+  --gradient-brand: linear-gradient(135deg, #a855f7 0%, #581c87 100%);
+  --gradient-glow: linear-gradient(135deg, rgba(168, 85, 247, 0.4), rgba(88, 28, 135, 0.4));
+  --gradient-text: linear-gradient(to right, #d8b4fe, #9333ea);
 
   --text-main: #f8fafc;
-  --text-muted: #94a3b8;
+  --text-muted: #d4c1cd;
 
   --font-sans: 'Inter', sans-serif;
   --font-display: 'Outfit', sans-serif;
@@ -103,8 +103,8 @@ ul {
 }
 
 .btn-outline:hover {
-  border-color: #f093fb;
-  background: rgba(240, 147, 251, 0.05);
+  border-color: var(--accent-purple);
+  background: rgba(147, 51, 234, 0.05);
 }
 
 .btn-ghost {
@@ -201,7 +201,7 @@ ul {
 .orb-1 {
   width: 500px;
   height: 500px;
-  background: #f093fb;
+  background: var(--accent-purple);
   top: -10%;
   left: -10%;
 }
@@ -209,7 +209,7 @@ ul {
 .orb-2 {
   width: 400px;
   height: 400px;
-  background: #4facfe;
+  background: var(--accent-cyan);
   top: 20%;
   right: -5%;
 }
@@ -253,8 +253,8 @@ ul {
 }
 
 .generator-container:focus-within {
-  border-color: rgba(240, 147, 251, 0.5);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(240, 147, 251, 0.1);
+  border-color: rgba(147, 51, 234, 0.5);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(147, 51, 234, 0.1);
 }
 
 .prompt-input {
@@ -321,7 +321,7 @@ ul {
   width: 40px;
   height: 40px;
   border: 3px solid rgba(255, 255, 255, 0.1);
-  border-top-color: #f093fb;
+  border-top-color: var(--accent-purple);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -362,7 +362,7 @@ ul {
 }
 
 .feature-mini-icon {
-  color: #f093fb;
+  color: var(--accent-purple);
 }
 
 /* Gallery Section */
@@ -491,7 +491,7 @@ ul {
 }
 
 .form-input:focus {
-  border-color: #f093fb;
+  border-color: var(--accent-purple);
 }
 
 /* How It Works */
@@ -518,16 +518,16 @@ ul {
 
 .step-card:hover {
   transform: translateY(-5px);
-  border-color: rgba(240, 147, 251, 0.3);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  border-color: rgba(147, 51, 234, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .step-icon {
   width: 64px;
   height: 64px;
   margin: 0 auto 20px;
-  background: rgba(240, 147, 251, 0.1);
-  color: #f093fb;
+  background: rgba(147, 51, 234, 0.1);
+  color: var(--accent-purple);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -606,6 +606,7 @@ ul {
     grid-template-columns: 1fr 1fr;
     gap: 40px;
   }
+
   .footer-brand {
     grid-column: span 2;
   }
@@ -629,6 +630,7 @@ ul {
   .footer-grid {
     grid-template-columns: 1fr;
   }
+
   .footer-brand {
     grid-column: span 1;
   }
