@@ -81,9 +81,9 @@ function generateImage() {
     
     // Set random image from Pexels as a placeholder for AI result
     const randomImages = [
-      "https://images.pexels.com/photos/8473930/pexels-photo-8473930.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/8442974/pexels-photo-8442974.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/8474028/pexels-photo-8474028.jpeg?auto=compress&cs=tinysrgb&w=800"
+      "https://images.pexels.com/photos/2881232/pexels-photo-2881232.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/3573383/pexels-photo-3573383.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1762973/pexels-photo-1762973.jpeg?auto=compress&cs=tinysrgb&w=800"
     ];
     const selectedImage = randomImages[Math.floor(Math.random() * randomImages.length)];
     
