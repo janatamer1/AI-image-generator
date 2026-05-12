@@ -175,6 +175,7 @@ function clearMyImages() {
   renderImages([]);
 }
 
+window.switchTab = switchTab;
 window.filterImages = filterImages;
 window.openImageModal = openImageModal;
 window.closeImageModal = closeImageModal;
