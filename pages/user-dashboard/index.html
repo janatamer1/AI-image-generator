@@ -38,9 +38,10 @@
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
         My Stats
       </a>
-      <a href="/pages/pricing/index.html" class="sidebar-link">
+      <a href="/pages/pricing/index.html" class="sidebar-link sidebar-upgrade-link" id="sidebarUpgradeLink">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
         Upgrade Plan
+        <span class="upgrade-badge" id="upgradeBadge" style="display:none;">PRO</span>
       </a>
     </nav>
 
@@ -183,6 +184,32 @@
             <span>Cyberpunk city at night</span>
           </button>
         </div>
+        <div class="upgrade-banner" id="upgradeBanner" style="display:none;">
+          <div class="upgrade-banner-glow"></div>
+          <div class="upgrade-banner-inner">
+            <div class="upgrade-banner-left">
+              <div class="upgrade-banner-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+              </div>
+              <div>
+                <p class="upgrade-banner-title">You're on the <strong>Free Plan</strong></p>
+                <p class="upgrade-banner-desc">10 generations/month · Standard quality · No priority queue</p>
+              </div>
+            </div>
+            <div class="upgrade-banner-right">
+              <div class="upgrade-banner-perks">
+                <span class="upgrade-perk"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> 500 generations/month</span>
+                <span class="upgrade-perk"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> HD 1024×1024 quality</span>
+                <span class="upgrade-perk"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Priority generation queue</span>
+              </div>
+              <a href="/pages/checkout/index.html?plan=pro&billing=monthly" class="btn btn-primary upgrade-banner-btn">
+                Upgrade to Pro — $12/mo
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
         <div class="recent-prompts-section" id="recentPromptsSection" style="display:none;">
           <p class="recent-prompts-label">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>

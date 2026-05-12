@@ -9,6 +9,18 @@ function initStudio(user) {
   document.getElementById('sidebarAvatar').textContent = user.name.charAt(0).toUpperCase();
   const plan = user.plan || 'free';
   document.getElementById('sidebarUserPlan').textContent = plan.charAt(0).toUpperCase() + plan.slice(1) + ' Plan';
+
+  if (plan === 'free') {
+    const banner = document.getElementById('upgradeBanner');
+    if (banner) banner.style.display = 'block';
+
+    const upgradeLink = document.getElementById('sidebarUpgradeLink');
+    if (upgradeLink) upgradeLink.classList.add('free-user');
+
+    const badge = document.getElementById('upgradeBadge');
+    if (badge) badge.style.display = 'inline-block';
+  }
+
   renderChatHistory(user);
   renderRecentPrompts(user);
 

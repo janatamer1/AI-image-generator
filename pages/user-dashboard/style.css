@@ -90,6 +90,33 @@
   color: var(--text-main);
 }
 
+.sidebar-upgrade-link {
+  margin-top: 4px;
+  position: relative;
+}
+
+.sidebar-upgrade-link.free-user {
+  color: #a78bfa;
+  background: rgba(147, 51, 234, 0.07);
+  border: 1px solid rgba(147, 51, 234, 0.18);
+}
+
+.sidebar-upgrade-link.free-user:hover {
+  background: rgba(147, 51, 234, 0.15);
+  color: #c4b5fd;
+}
+
+.upgrade-badge {
+  margin-left: auto;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  background: var(--gradient-brand);
+  color: white;
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+}
+
 .sidebar-history {
   flex: 1;
   overflow-y: auto;
@@ -600,6 +627,95 @@
 }
 
 /* Recent Prompts */
+/* ── Upgrade Banner ── */
+.upgrade-banner {
+  position: relative;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(147, 51, 234, 0.3);
+  background: linear-gradient(135deg, rgba(147,51,234,0.08) 0%, rgba(88,28,135,0.05) 100%);
+  overflow: hidden;
+  margin-top: 28px;
+  max-width: 680px;
+}
+
+.upgrade-banner-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% -20%, rgba(147,51,234,0.18) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.upgrade-banner-inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 22px;
+  flex-wrap: wrap;
+}
+
+.upgrade-banner-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.upgrade-banner-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md);
+  background: rgba(147, 51, 234, 0.15);
+  border: 1px solid rgba(147, 51, 234, 0.25);
+  color: #a78bfa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.upgrade-banner-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 3px;
+}
+
+.upgrade-banner-title strong { color: #a78bfa; }
+
+.upgrade-banner-desc {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.upgrade-banner-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.upgrade-banner-perks {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.upgrade-perk {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.upgrade-banner-btn {
+  white-space: nowrap;
+  font-size: 0.82rem;
+  gap: 6px;
+  padding: 10px 18px;
+}
+
 .recent-prompts-section {
   margin-top: 20px;
   text-align: left;
