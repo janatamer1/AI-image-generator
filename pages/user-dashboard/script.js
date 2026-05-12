@@ -123,7 +123,9 @@ function sendStudioMessage() {
 
   const loadingId = appendLoadingMessage();
 
-  generateImageFromPrompt(prompt).then(imageUrl => {
+  generateImageFromPrompt(prompt, (attempt, max) => {
+    if (attempt > 1) updateLoadingMessage(loadingId, attempt, max);
+  }).then(imageUrl => {
     removeLoadingMessage(loadingId);
     appendImageMessage(imageUrl, prompt, true);
     sendBtn.disabled = false;
@@ -202,6 +204,13 @@ function appendErrorMessage(prompt) {
     </div>
   `;
   messages.appendChild(el);
+}
+
+function updateLoadingMessage(id, attempt, max) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const textEl = el.querySelector('.gen-text span:first-child');
+  if (textEl) textEl.textContent = `Retrying... (attempt ${attempt}/${max})`;
 }
 
 function removeLoadingMessage(id) {

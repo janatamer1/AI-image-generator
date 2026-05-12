@@ -1,6 +1,7 @@
-/* AI image generation — races 3 parallel requests, uses whichever loads first */
+/* AI image generation — auto-retries up to 3 times, races 5 parallel requests per attempt */
 
-const TIMEOUT_MS = 25000;
+const ATTEMPT_TIMEOUT = 20000;
+const MAX_ATTEMPTS = 3;
 
 function buildUrl(prompt, model, seed) {
   const encoded = encodeURIComponent(prompt.trim());
@@ -16,22 +17,32 @@ function loadImageUrl(url) {
   });
 }
 
-function generateImageFromPrompt(prompt) {
-  const base = Math.floor(Math.random() * 999999);
-  const candidates = [
-    buildUrl(prompt, 'turbo', base),
-    buildUrl(prompt, 'turbo', base + 1),
-    buildUrl(prompt, 'flux-schnell', base + 2),
-  ];
+async function generateImageFromPrompt(prompt, onAttempt) {
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    if (onAttempt) onAttempt(attempt, MAX_ATTEMPTS);
 
-  const timeout = new Promise((_, reject) =>
-    setTimeout(() => reject(new Error('timeout')), TIMEOUT_MS)
-  );
+    const base = Math.floor(Math.random() * 999999);
+    const candidates = [
+      buildUrl(prompt, 'turbo', base),
+      buildUrl(prompt, 'turbo', base + 1),
+      buildUrl(prompt, 'turbo', base + 2),
+      buildUrl(prompt, 'flux-schnell', base + 3),
+      buildUrl(prompt, 'flux-schnell', base + 4),
+    ];
 
-  return Promise.race([
-    Promise.any(candidates.map(url => loadImageUrl(url))),
-    timeout
-  ]);
+    const timeout = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('timeout')), ATTEMPT_TIMEOUT)
+    );
+
+    try {
+      return await Promise.race([
+        Promise.any(candidates.map(url => loadImageUrl(url))),
+        timeout
+      ]);
+    } catch {
+      if (attempt === MAX_ATTEMPTS) throw new Error('All attempts failed');
+    }
+  }
 }
 
 window.generateImageFromPrompt = generateImageFromPrompt;

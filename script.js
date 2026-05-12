@@ -49,21 +49,24 @@ function generateImage() {
   generatorOutput.classList.add('active');
   outputImage.style.display = 'none';
   outputActions.style.display = 'none';
-  loadingState.innerHTML = `
-    <div class="loading-ring"></div>
-    <div class="loading-text">
-      <p>Creating your image</p>
-      <span id="loadingTimer">0</span><span>s</span>
-    </div>`;
+  function buildLoadingHTML(attempt, max) {
+    const attemptText = max > 1 && attempt > 1 ? ` · Attempt ${attempt}/${max}` : '';
+    return `
+      <div class="loading-ring"></div>
+      <div class="loading-text">
+        <p>Creating your image<span id="loadingAttempt">${attemptText}</span></p>
+        <span id="loadingTimer">0</span><span>s</span>
+      </div>`;
+  }
+
+  loadingState.innerHTML = buildLoadingHTML(1, 3);
   loadingState.style.display = 'flex';
 
-  const loadingTimer = document.getElementById('loadingTimer');
   let elapsed = 0;
-  loadingTimer.textContent = elapsed;
-
   const timerInterval = setInterval(() => {
     elapsed += 1;
-    loadingTimer.textContent = elapsed;
+    const el = document.getElementById('loadingTimer');
+    if (el) el.textContent = elapsed;
   }, 1000);
 
   function resetBtn() {
@@ -71,7 +74,9 @@ function generateImage() {
     generateBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg> Generate`;
   }
 
-  generateImageFromPrompt(promptText).then(imageUrl => {
+  generateImageFromPrompt(promptText, (attempt, max) => {
+    loadingState.innerHTML = buildLoadingHTML(attempt, max);
+  }).then(imageUrl => {
     clearInterval(timerInterval);
     loadingState.style.display = 'none';
 
@@ -85,8 +90,8 @@ function generateImage() {
     clearInterval(timerInterval);
     loadingState.innerHTML = `
       <div style="text-align:center;">
-        <p style="color:#f87171;margin-bottom:12px;">Generation timed out. Please try again.</p>
-        <button class="btn btn-primary btn-sm" onclick="generateImage()">Retry</button>
+        <p style="color:#f87171;margin-bottom:12px;">Could not generate image. Please try again.</p>
+        <button class="btn btn-primary btn-sm" onclick="generateImage()">Try Again</button>
       </div>`;
     resetBtn();
   });
