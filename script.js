@@ -60,10 +60,12 @@ function generateImage() {
     loadingTimer.textContent = elapsed;
   }, 1000);
 
-  const imageUrl = getImageForPrompt(promptText);
-  const img = new Image();
+  function resetBtn() {
+    generateBtn.disabled = false;
+    generateBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg> Generate`;
+  }
 
-  function finishGeneration() {
+  generateImageFromPrompt(promptText).then(imageUrl => {
     clearInterval(timerInterval);
     loadingState.style.display = 'none';
 
@@ -71,16 +73,17 @@ function generateImage() {
     outputImage.style.display = 'block';
     outputPromptText.textContent = `"${promptText}"`;
     outputActions.style.display = 'flex';
-
-    generateBtn.disabled = false;
-    generateBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg> Generate`;
-
+    resetBtn();
     generatorOutput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
-
-  img.onload = finishGeneration;
-  img.onerror = finishGeneration;
-  img.src = imageUrl;
+  }).catch(() => {
+    clearInterval(timerInterval);
+    loadingState.innerHTML = `
+      <div style="text-align:center;">
+        <p style="color:#f87171;margin-bottom:12px;">Generation timed out. Please try again.</p>
+        <button class="btn btn-primary btn-sm" onclick="generateImage()">Retry</button>
+      </div>`;
+    resetBtn();
+  });
 }
 
 function downloadImage() {

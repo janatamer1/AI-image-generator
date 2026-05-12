@@ -123,21 +123,20 @@ function sendStudioMessage() {
 
   const loadingId = appendLoadingMessage();
 
-  const imageUrl = getImageForPrompt(prompt);
-  const img = new Image();
-
-  function onImageReady() {
+  generateImageFromPrompt(prompt).then(imageUrl => {
     removeLoadingMessage(loadingId);
     appendImageMessage(imageUrl, prompt, true);
     sendBtn.disabled = false;
     sendBtn.classList.remove('loading');
     saveMessage(prompt, imageUrl);
     scrollToBottom();
-  }
-
-  img.onload = onImageReady;
-  img.onerror = onImageReady;
-  img.src = imageUrl;
+  }).catch(() => {
+    removeLoadingMessage(loadingId);
+    appendErrorMessage(prompt);
+    sendBtn.disabled = false;
+    sendBtn.classList.remove('loading');
+    scrollToBottom();
+  });
 }
 
 function appendUserMessage(text, animate) {
@@ -187,6 +186,22 @@ function appendLoadingMessage() {
 
   scrollToBottom();
   return id;
+}
+
+function appendErrorMessage(prompt) {
+  const messages = document.getElementById('chatMessages');
+  const el = document.createElement('div');
+  el.className = 'chat-message ai-message animate-in';
+  el.innerHTML = `
+    <div class="ai-avatar">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+    </div>
+    <div class="ai-bubble">
+      <div style="color:#f87171;margin-bottom:10px;font-size:0.9rem;">Generation timed out. The AI servers are busy — please try again.</div>
+      <button class="btn btn-primary btn-xs" onclick="fillStudioPrompt(${JSON.stringify(prompt)});sendStudioMessage()">Retry</button>
+    </div>
+  `;
+  messages.appendChild(el);
 }
 
 function removeLoadingMessage(id) {
