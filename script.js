@@ -41,7 +41,6 @@ function generateImage() {
   const loadingState = document.getElementById('loadingState');
   const outputActions = document.getElementById('outputActions');
   const outputPromptText = document.getElementById('outputPromptText');
-  const loadingTimer = document.getElementById('loadingTimer');
   const generateBtn = document.getElementById('generateBtn');
 
   generateBtn.disabled = true;
@@ -50,8 +49,15 @@ function generateImage() {
   generatorOutput.classList.add('active');
   outputImage.style.display = 'none';
   outputActions.style.display = 'none';
+  loadingState.innerHTML = `
+    <div class="loading-ring"></div>
+    <div class="loading-text">
+      <p>Creating your image</p>
+      <span id="loadingTimer">0</span><span>s</span>
+    </div>`;
   loadingState.style.display = 'flex';
 
+  const loadingTimer = document.getElementById('loadingTimer');
   let elapsed = 0;
   loadingTimer.textContent = elapsed;
 
