@@ -94,14 +94,122 @@
   letter-spacing: 0.06em;
 }
 
+.card-subtitle {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  margin-top: -8px;
+}
+
 .profile-forms {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
+/* Password field with eye toggle */
+.input-with-eye {
+  position: relative;
+}
+
+.input-with-eye .form-input {
+  padding-right: 44px !important;
+}
+
+.eye-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+  line-height: 0;
+}
+
+.eye-toggle:hover { color: var(--text-main); }
+
+/* Strength meter */
+.strength-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.strength-bars {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+
+.strength-bar {
+  height: 4px;
+  flex: 1;
+  border-radius: 100px;
+  background: rgba(255,255,255,0.06);
+  transition: background 0.3s ease;
+}
+
+.strength-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  min-width: 40px;
+  text-align: right;
+  transition: color 0.3s ease;
+}
+
+/* Requirements checklist */
+.pwd-requirements {
+  padding: 12px 14px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.req-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+  margin: 0;
+}
+
+.req-item svg {
+  flex-shrink: 0;
+  stroke: currentColor;
+}
+
+.req-item.req-met {
+  color: #4ade80;
+}
+
+/* Match hint */
+.match-hint {
+  font-size: 0.78rem;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+.match-ok { color: #4ade80; }
+.match-fail { color: #f87171; }
+
+/* Success banner */
 .form-success {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 0.85rem;
   padding: 10px 14px;
   border-radius: var(--radius-sm);

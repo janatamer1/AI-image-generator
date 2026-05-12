@@ -34,7 +34,7 @@
         <p class="pricing-subtitle">Choose the plan that fits your creative needs. Upgrade or downgrade anytime.</p>
         <div class="billing-toggle">
           <span class="billing-label active" id="monthlyLabel">Monthly</span>
-          <div class="toggle-switch" onclick="toggleBilling()">
+          <div class="toggle-switch" id="billingTrack" onclick="toggleBilling()" role="switch" aria-checked="false">
             <div class="toggle-knob" id="billingKnob"></div>
           </div>
           <span class="billing-label" id="yearlyLabel">Yearly <span class="save-badge">Save 20%</span></span>
@@ -85,6 +85,7 @@
             </div>
           </div>
           <div class="plan-price">
+            <span class="price-original" id="proOriginal" style="display:none;">$12</span>
             <span class="price-amount" id="proPrice">$12</span>
             <span class="price-period">/month</span>
           </div>
@@ -113,6 +114,7 @@
             </div>
           </div>
           <div class="plan-price">
+            <span class="price-original" id="enterpriseOriginal" style="display:none;">$49</span>
             <span class="price-amount" id="enterprisePrice">$49</span>
             <span class="price-period">/month</span>
           </div>

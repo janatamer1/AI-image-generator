@@ -63,8 +63,23 @@
   width: 20px; height: 20px;
   background: var(--accent-purple);
   border-radius: 50%;
-  transition: var(--transition);
+  transition: transform 0.25s ease, background 0.25s ease;
   box-shadow: 0 2px 8px rgba(147, 51, 234, 0.4);
+}
+
+.toggle-switch.track-active {
+  background: rgba(147, 51, 234, 0.4);
+  border-color: rgba(147, 51, 234, 0.6);
+}
+
+.price-original {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  text-decoration: line-through;
+  margin-right: 4px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  opacity: 0.5;
 }
 
 .save-badge {
