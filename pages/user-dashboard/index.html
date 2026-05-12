@@ -34,6 +34,10 @@
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         Profile
       </a>
+      <a href="/pages/user-stats/index.html" class="sidebar-link">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        My Stats
+      </a>
       <a href="/pages/pricing/index.html" class="sidebar-link">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
         Upgrade Plan
@@ -196,6 +200,19 @@
 
     <!-- Input Area -->
     <div class="studio-input-area">
+      <div class="style-selector-row" id="styleSelectorRow">
+        <span class="style-chips-label">Style</span>
+        <div class="style-chips" id="styleChips">
+          <button class="style-chip active" onclick="selectStyle(this, '')">Default</button>
+          <button class="style-chip" onclick="selectStyle(this, 'photorealistic photography, 8k')">Photorealistic</button>
+          <button class="style-chip" onclick="selectStyle(this, 'anime illustration, vibrant colors')">Anime</button>
+          <button class="style-chip" onclick="selectStyle(this, 'watercolor painting, soft washes')">Watercolor</button>
+          <button class="style-chip" onclick="selectStyle(this, 'oil painting, rich texture, impasto')">Oil Painting</button>
+          <button class="style-chip" onclick="selectStyle(this, 'pencil sketch, fine linework')">Sketch</button>
+          <button class="style-chip" onclick="selectStyle(this, 'cyberpunk neon aesthetic, futuristic city')">Cyberpunk</button>
+          <button class="style-chip" onclick="selectStyle(this, 'fantasy digital art, epic lighting')">Fantasy</button>
+        </div>
+      </div>
       <div class="studio-input-wrapper">
         <textarea
           id="studioPrompt"

@@ -2,6 +2,7 @@ const user = requireAuth('user');
 if (user) initStudio(user);
 
 let currentChatId = null;
+let selectedStyle = '';
 
 function initStudio(user) {
   document.getElementById('sidebarUserName').textContent = user.name;
@@ -10,6 +11,20 @@ function initStudio(user) {
   document.getElementById('sidebarUserPlan').textContent = plan.charAt(0).toUpperCase() + plan.slice(1) + ' Plan';
   renderChatHistory(user);
   renderRecentPrompts(user);
+
+  const pending = sessionStorage.getItem('regen_prompt');
+  if (pending) {
+    sessionStorage.removeItem('regen_prompt');
+    setTimeout(() => {
+      fillStudioPrompt(pending);
+    }, 80);
+  }
+}
+
+function selectStyle(btn, style) {
+  document.querySelectorAll('.style-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  selectedStyle = style;
 }
 
 function renderRecentPrompts(user) {
@@ -106,8 +121,10 @@ function autoResizeTextarea(el) {
 
 function sendStudioMessage() {
   const textarea = document.getElementById('studioPrompt');
-  const prompt = textarea.value.trim();
-  if (!prompt) return;
+  const basePrompt = textarea.value.trim();
+  if (!basePrompt) return;
+
+  const prompt = selectedStyle ? `${basePrompt}, ${selectedStyle}` : basePrompt;
 
   textarea.value = '';
   textarea.style.height = 'auto';
@@ -119,7 +136,7 @@ function sendStudioMessage() {
   sendBtn.disabled = true;
   sendBtn.classList.add('loading');
 
-  appendUserMessage(prompt, true);
+  appendUserMessage(basePrompt, true);
 
   const loadingId = appendLoadingMessage();
 
@@ -127,14 +144,14 @@ function sendStudioMessage() {
     if (attempt > 1) updateLoadingMessage(loadingId, attempt, max);
   }).then(imageUrl => {
     removeLoadingMessage(loadingId);
-    appendImageMessage(imageUrl, prompt, true);
+    appendImageMessage(imageUrl, basePrompt, true);
     sendBtn.disabled = false;
     sendBtn.classList.remove('loading');
-    saveMessage(prompt, imageUrl);
+    saveMessage(basePrompt, imageUrl);
     scrollToBottom();
   }).catch(() => {
     removeLoadingMessage(loadingId);
-    appendErrorMessage(prompt);
+    appendErrorMessage(basePrompt);
     sendBtn.disabled = false;
     sendBtn.classList.remove('loading');
     scrollToBottom();
@@ -449,6 +466,7 @@ window.autoResizeTextarea = autoResizeTextarea;
 window.sendStudioMessage = sendStudioMessage;
 window.downloadGenerated = downloadGenerated;
 window.toggleSidebar = toggleSidebar;
+window.selectStyle = selectStyle;
 window.openChangePassword = openChangePassword;
 window.closeChangePassword = closeChangePassword;
 window.closeCpwOnBackdrop = closeCpwOnBackdrop;

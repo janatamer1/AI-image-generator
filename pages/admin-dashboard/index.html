@@ -27,6 +27,10 @@
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           Manage Users
         </a>
+        <a href="/pages/admin-images/index.html" class="admin-nav-link">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          All Images
+        </a>
       </nav>
       <div class="admin-sidebar-footer">
         <button class="admin-logout-btn" onclick="logout()">
@@ -188,6 +192,17 @@
           <span class="admin-card-subtitle">Users ranked by images created</span>
         </div>
         <div class="top-generators-list" id="topGeneratorsList"></div>
+      </div>
+
+      <!-- Recent Activity Feed -->
+      <div class="admin-card admin-card-full" style="margin-top:20px;">
+        <div class="admin-card-header">
+          <h2 class="admin-card-title">Recent Activity</h2>
+          <a href="/pages/admin-images/index.html" class="btn btn-ghost btn-sm">View All Images</a>
+        </div>
+        <div class="activity-feed" id="activityFeed">
+          <p style="color:var(--text-muted);font-size:0.88rem;">No activity yet.</p>
+        </div>
       </div>
 
     </main>

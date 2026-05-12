@@ -6,6 +6,7 @@ function initAdminDashboard(admin) {
   renderStats();
   renderRecentUsers();
   renderTopGenerators();
+  renderActivityFeed();
   startClock();
 }
 
@@ -72,6 +73,46 @@ function renderRecentUsers() {
       <td>${u.joinedAt || '—'}</td>
       <td>${(u.images || []).length}</td>
     </tr>`;
+  }).join('');
+}
+
+function renderActivityFeed() {
+  const store = getStore();
+  const container = document.getElementById('activityFeed');
+  if (!container) return;
+
+  const activities = [];
+  store.users.forEach(u => {
+    (u.images || []).forEach(img => {
+      activities.push({ user: u, img });
+    });
+  });
+
+  activities.sort((a, b) => (b.img.createdAt || '').localeCompare(a.img.createdAt || ''));
+  const recent = activities.slice(0, 12);
+
+  if (recent.length === 0) {
+    container.innerHTML = '<p style="color:var(--text-muted);font-size:0.88rem;">No activity yet. Images generated will appear here.</p>';
+    return;
+  }
+
+  container.innerHTML = recent.map(({ user: u, img }) => {
+    const promptShort = img.prompt.length > 70 ? img.prompt.slice(0, 70) + '…' : img.prompt;
+    return `
+    <div class="activity-item">
+      <div class="activity-avatar">${u.name.charAt(0).toUpperCase()}</div>
+      <div class="activity-info">
+        <div class="activity-header">
+          <span class="activity-name">${u.name}</span>
+          <span class="activity-action">generated an image</span>
+        </div>
+        <div class="activity-prompt">"${promptShort}"</div>
+      </div>
+      <div class="activity-thumb">
+        <img src="${img.url}" alt="${img.prompt}" loading="lazy">
+      </div>
+      <div class="activity-date">${img.createdAt || '—'}</div>
+    </div>`;
   }).join('');
 }
 

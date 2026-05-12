@@ -109,10 +109,20 @@ function filterImages() {
 }
 
 function openImageModal(url, prompt) {
-  document.getElementById('modalImage').src = url;
+  const img = document.getElementById('modalImage');
+  img.src = url;
+  img.dataset.prompt = prompt;
   document.getElementById('modalPrompt').textContent = `"${prompt}"`;
   document.getElementById('imageModal').classList.add('active');
   document.body.style.overflow = 'hidden';
+}
+
+function regenerateImage() {
+  const prompt = document.getElementById('modalImage').dataset.prompt;
+  if (prompt) {
+    sessionStorage.setItem('regen_prompt', prompt);
+    window.location.href = '/pages/user-dashboard/index.html';
+  }
 }
 
 function closeImageModal(e) {
@@ -137,3 +147,4 @@ window.filterImages = filterImages;
 window.openImageModal = openImageModal;
 window.closeImageModal = closeImageModal;
 window.downloadModalImage = downloadModalImage;
+window.regenerateImage = regenerateImage;

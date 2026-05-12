@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All Images - AI ImageGen</title>
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <link rel="stylesheet" href="/shared/styles.css">
+  <link rel="stylesheet" href="/pages/admin-dashboard/style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="admin-sidebar-header">
+        <a href="/index.html" class="logo-text">AI <span class="gradient-text">ImageGen</span></a>
+        <span class="admin-badge">Admin</span>
+      </div>
+      <nav class="admin-nav">
+        <div class="admin-nav-label">Overview</div>
+        <a href="/pages/admin-dashboard/index.html" class="admin-nav-link">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </a>
+        <a href="/pages/admin-users/index.html" class="admin-nav-link">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Manage Users
+        </a>
+        <a href="/pages/admin-images/index.html" class="admin-nav-link active">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          All Images
+        </a>
+      </nav>
+      <div class="admin-sidebar-footer">
+        <button class="admin-logout-btn" onclick="logout()">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Log Out
+        </button>
+      </div>
+    </aside>
+
+    <main class="admin-content">
+      <div class="admin-topbar">
+        <div>
+          <h1 class="admin-page-title">All Images</h1>
+          <p class="admin-page-subtitle">Every image generated across the platform</p>
+        </div>
+        <div class="admin-topbar-actions">
+          <div class="admin-topbar-time" id="adminClock"></div>
+        </div>
+      </div>
+
+      <div class="ai-summary-row">
+        <div class="ai-sum-card">
+          <span class="ai-sum-value" id="sumTotal">0</span>
+          <span class="ai-sum-label">Total Images</span>
+        </div>
+        <div class="ai-sum-card">
+          <span class="ai-sum-value" id="sumUsers">0</span>
+          <span class="ai-sum-label">Unique Creators</span>
+        </div>
+        <div class="ai-sum-card">
+          <span class="ai-sum-value" id="sumToday">0</span>
+          <span class="ai-sum-label">Generated Today</span>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <div class="ai-toolbar">
+          <div class="search-bar-inline">
+            <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input type="text" class="form-input search-input" id="imgSearch" placeholder="Search by prompt..." oninput="filterImages()">
+          </div>
+          <select class="form-input ai-user-filter" id="userFilter" onchange="filterImages()">
+            <option value="">All Users</option>
+          </select>
+          <div class="ai-count-badge" id="imgCount">0 images</div>
+        </div>
+        <div class="ai-grid" id="aiGrid">
+          <div class="empty-state">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:0.3;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            <p>No images generated yet.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Image Modal -->
+  <div class="modal-overlay" id="imgModal" onclick="closeImgModal(event)">
+    <div class="ai-modal-content">
+      <button class="modal-close" onclick="closeImgModal()">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+      <img src="" alt="" id="aiModalImg" class="ai-modal-img">
+      <div class="ai-modal-info">
+        <p class="ai-modal-prompt" id="aiModalPrompt"></p>
+        <div class="ai-modal-meta">
+          <span id="aiModalUser"></span>
+          <span id="aiModalDate"></span>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="downloadAiModal()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/shared/store.js"></script>
+  <script type="module" src="/shared/navbar.js"></script>
+  <script type="module" src="script.js"></script>
+</body>
+</html>

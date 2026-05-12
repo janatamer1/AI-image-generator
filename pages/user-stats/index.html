@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Stats - AI ImageGen</title>
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <link rel="stylesheet" href="/shared/styles.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container navbar-container">
+      <a href="/index.html" class="logo-text">AI <span class="gradient-text">ImageGen</span></a>
+      <ul class="navbar-links">
+        <li><a href="/pages/user-dashboard/index.html" class="nav-link">Studio</a></li>
+        <li><a href="/pages/user-images/index.html" class="nav-link">My Images</a></li>
+        <li><a href="/pages/user-profile/index.html" class="nav-link">Profile</a></li>
+        <li><a href="/pages/user-stats/index.html" class="nav-link active">Stats</a></li>
+      </ul>
+      <div class="navbar-actions">
+        <span class="user-badge" id="userBadge">User</span>
+        <button class="btn btn-ghost" onclick="logout()">Log Out</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="dashboard-main">
+    <div class="container">
+      <div class="dashboard-header">
+        <div>
+          <h1 class="dashboard-title">My Stats</h1>
+          <p class="dashboard-subtitle">Your personal generation analytics and activity overview.</p>
+        </div>
+        <a href="/pages/user-dashboard/index.html" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+          Generate More
+        </a>
+      </div>
+
+      <!-- Overview Stats -->
+      <div class="stats-overview-grid">
+        <div class="stats-ov-card">
+          <div class="stats-ov-icon" style="background:rgba(147,51,234,0.1);color:#a855f7;border-color:rgba(147,51,234,0.2);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          </div>
+          <div class="stats-ov-data">
+            <span class="stats-ov-value" id="ovImages">0</span>
+            <span class="stats-ov-label">Images Generated</span>
+          </div>
+        </div>
+        <div class="stats-ov-card">
+          <div class="stats-ov-icon" style="background:rgba(59,130,246,0.1);color:#60a5fa;border-color:rgba(59,130,246,0.2);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div class="stats-ov-data">
+            <span class="stats-ov-value" id="ovChats">0</span>
+            <span class="stats-ov-label">Chat Sessions</span>
+          </div>
+        </div>
+        <div class="stats-ov-card">
+          <div class="stats-ov-icon" style="background:rgba(239,68,68,0.1);color:#f87171;border-color:rgba(239,68,68,0.2);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <div class="stats-ov-data">
+            <span class="stats-ov-value" id="ovFavs">0</span>
+            <span class="stats-ov-label">Saved Favorites</span>
+          </div>
+        </div>
+        <div class="stats-ov-card">
+          <div class="stats-ov-icon" style="background:rgba(34,197,94,0.1);color:#4ade80;border-color:rgba(34,197,94,0.2);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="stats-ov-data">
+            <span class="stats-ov-value" id="ovDays">0</span>
+            <span class="stats-ov-label">Days Active</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-two-col">
+        <!-- Monthly Activity Chart -->
+        <div class="dashboard-card">
+          <h2 class="card-title">Monthly Activity</h2>
+          <p class="stats-card-sub">Images generated per month (last 6 months)</p>
+          <div class="monthly-chart" id="monthlyChart">
+            <p style="color:var(--text-muted);font-size:0.85rem;">No data yet.</p>
+          </div>
+        </div>
+
+        <!-- Top Prompts -->
+        <div class="dashboard-card">
+          <h2 class="card-title">Top Prompt Words</h2>
+          <p class="stats-card-sub">Most frequently used words in your prompts</p>
+          <div class="top-words-list" id="topWordsList">
+            <p style="color:var(--text-muted);font-size:0.85rem;">No prompts yet.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Prompts -->
+      <div class="dashboard-card">
+        <h2 class="card-title">Recent Prompts</h2>
+        <p class="stats-card-sub">Your last 10 image prompts</p>
+        <div class="recent-prompts-table" id="recentPromptsTable">
+          <p style="color:var(--text-muted);font-size:0.85rem;">No prompts yet.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="/shared/store.js"></script>
+  <script type="module" src="/shared/navbar.js"></script>
+  <script type="module" src="script.js"></script>
+</body>
+</html>

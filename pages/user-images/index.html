@@ -16,6 +16,7 @@
         <li><a href="/pages/user-dashboard/index.html" class="nav-link">Studio</a></li>
         <li><a href="/pages/user-images/index.html" class="nav-link active">My Images</a></li>
         <li><a href="/pages/user-profile/index.html" class="nav-link">Profile</a></li>
+        <li><a href="/pages/user-stats/index.html" class="nav-link">Stats</a></li>
       </ul>
       <div class="navbar-actions">
         <span class="user-badge" id="userBadge">User</span>
@@ -88,7 +89,11 @@
       <div class="modal-img-info">
         <p id="modalPrompt"></p>
         <div class="modal-img-actions">
-          <button class="btn btn-primary btn-sm" onclick="downloadModalImage()">
+          <button class="btn btn-primary btn-sm" onclick="regenerateImage()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/></svg>
+            Regenerate
+          </button>
+          <button class="btn btn-ghost btn-sm" onclick="downloadModalImage()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download
           </button>
