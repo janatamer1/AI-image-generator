@@ -210,7 +210,12 @@ function updateLoadingMessage(id, attempt, max) {
   const el = document.getElementById(id);
   if (!el) return;
   const textEl = el.querySelector('.gen-text span:first-child');
-  if (textEl) textEl.textContent = `Retrying... (attempt ${attempt}/${max})`;
+  if (!textEl) return;
+  if (attempt === 1) {
+    textEl.textContent = 'Generating your image...';
+  } else {
+    textEl.textContent = 'AI is busy — finding a photo match...';
+  }
 }
 
 function removeLoadingMessage(id) {

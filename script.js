@@ -49,17 +49,17 @@ function generateImage() {
   generatorOutput.classList.add('active');
   outputImage.style.display = 'none';
   outputActions.style.display = 'none';
-  function buildLoadingHTML(attempt, max) {
-    const attemptText = max > 1 && attempt > 1 ? ` · Attempt ${attempt}/${max}` : '';
+  function buildLoadingHTML(attempt) {
+    const label = attempt === 2 ? 'AI busy — finding a photo match…' : 'Creating your image…';
     return `
       <div class="loading-ring"></div>
       <div class="loading-text">
-        <p>Creating your image<span id="loadingAttempt">${attemptText}</span></p>
+        <p id="loadingAttempt">${label}</p>
         <span id="loadingTimer">0</span><span>s</span>
       </div>`;
   }
 
-  loadingState.innerHTML = buildLoadingHTML(1, 3);
+  loadingState.innerHTML = buildLoadingHTML(1);
   loadingState.style.display = 'flex';
 
   let elapsed = 0;
@@ -74,8 +74,10 @@ function generateImage() {
     generateBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg> Generate`;
   }
 
-  generateImageFromPrompt(promptText, (attempt, max) => {
-    loadingState.innerHTML = buildLoadingHTML(attempt, max);
+  generateImageFromPrompt(promptText, (attempt) => {
+    loadingState.innerHTML = buildLoadingHTML(attempt);
+    const el = document.getElementById('loadingTimer');
+    if (el) el.textContent = elapsed;
   }).then(imageUrl => {
     clearInterval(timerInterval);
     loadingState.style.display = 'none';

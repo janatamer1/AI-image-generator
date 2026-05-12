@@ -1,8 +1,10 @@
-/* Image generation — races LoremFlickr (instant keyword photos) + Pollinations (AI).
-   LoremFlickr is the reliable backbone; Pollinations wins if it's fast. */
+/* Image generation strategy:
+   1. Fire 6 parallel Pollinations requests (AI — generates the actual prompt).
+   2. Wait up to 40 s for any of them to load.
+   3. Only if every AI request fails, fall back to LoremFlickr (relevant photo). */
 
-const ATTEMPT_TIMEOUT = 20000;
-const MAX_ATTEMPTS = 2;
+const AI_TIMEOUT    = 40000;
+const FLICKR_TIMEOUT = 10000;
 
 const STOP_WORDS = new Set([
   'a','an','the','of','in','on','at','to','for','with','is','are','was','were',
@@ -20,51 +22,60 @@ function extractKeywords(prompt) {
   return words.length ? words.join(',') : 'nature,scenery';
 }
 
+function buildPollinationsUrl(prompt, model, seed) {
+  const encoded = encodeURIComponent(prompt.trim());
+  return `https://image.pollinations.ai/prompt/${encoded}?width=768&height=768&nologo=true&enhance=false&model=${model}&seed=${seed}`;
+}
+
 function buildLoremFlickrUrl(prompt, seed) {
   const keywords = extractKeywords(prompt);
   return `https://loremflickr.com/800/800/${encodeURIComponent(keywords)}?random=${seed}`;
 }
 
-function buildPollinationsUrl(prompt, model, seed) {
-  const encoded = encodeURIComponent(prompt.trim());
-  return `https://image.pollinations.ai/prompt/${encoded}?width=512&height=512&nologo=true&model=${model}&seed=${seed}`;
-}
-
 function loadImageUrl(url) {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    img.onload = () => resolve(url);
-    img.onerror = () => reject(new Error('failed'));
+    img.onload  = () => resolve(url);
+    img.onerror = () => reject(new Error('failed: ' + url));
     img.src = url;
   });
 }
 
 async function generateImageFromPrompt(prompt, onAttempt) {
-  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
-    if (onAttempt) onAttempt(attempt, MAX_ATTEMPTS);
+  const seed = Math.floor(Math.random() * 999999);
 
-    const seed = Math.floor(Math.random() * 999999);
+  /* ── Phase 1: AI generation (Pollinations) ── */
+  if (onAttempt) onAttempt(1, 2);
 
-    const candidates = [
-      buildLoremFlickrUrl(prompt, seed),
-      buildLoremFlickrUrl(prompt, seed + 1),
-      buildPollinationsUrl(prompt, 'turbo', seed),
-      buildPollinationsUrl(prompt, 'flux-schnell', seed + 1),
-    ];
+  const aiUrls = [
+    buildPollinationsUrl(prompt, 'turbo',       seed),
+    buildPollinationsUrl(prompt, 'turbo',       seed + 1),
+    buildPollinationsUrl(prompt, 'turbo',       seed + 2),
+    buildPollinationsUrl(prompt, 'flux-schnell', seed + 3),
+    buildPollinationsUrl(prompt, 'flux-schnell', seed + 4),
+    buildPollinationsUrl(prompt, 'flux',         seed + 5),
+  ];
 
-    const timeout = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error('timeout')), ATTEMPT_TIMEOUT)
-    );
-
-    try {
-      return await Promise.race([
-        Promise.any(candidates.map(url => loadImageUrl(url))),
-        timeout
-      ]);
-    } catch {
-      if (attempt === MAX_ATTEMPTS) throw new Error('All attempts failed');
-    }
+  try {
+    return await Promise.race([
+      Promise.any(aiUrls.map(url => loadImageUrl(url))),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('AI timeout')), AI_TIMEOUT)
+      ),
+    ]);
+  } catch {
+    /* AI failed — fall through to photo fallback */
   }
+
+  /* ── Phase 2: Photo fallback (LoremFlickr) ── */
+  if (onAttempt) onAttempt(2, 2);
+
+  return await Promise.race([
+    loadImageUrl(buildLoremFlickrUrl(prompt, seed)),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Flickr timeout')), FLICKR_TIMEOUT)
+    ),
+  ]);
 }
 
 window.generateImageFromPrompt = generateImageFromPrompt;
