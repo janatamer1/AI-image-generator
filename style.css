@@ -423,8 +423,8 @@
 
 .gallery-grid {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr;
-  grid-template-rows: 280px 280px;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 360px;
   gap: 16px;
 }
 
