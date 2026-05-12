@@ -1,9 +1,9 @@
-const user = requireAuth('user');
-if (user) initImagesPage(user);
-
 let allImages = [];
 let allFavorites = [];
 let activeTab = 'all';
+
+const user = requireAuth('user');
+if (user) initImagesPage(user);
 
 function initImagesPage(user) {
   initNavbar();

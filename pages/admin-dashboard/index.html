@@ -44,6 +44,7 @@
           <p class="admin-page-subtitle">Platform overview and key metrics</p>
         </div>
         <div class="admin-topbar-actions">
+          <div class="admin-topbar-time" id="adminClock"></div>
           <div class="admin-badge-user" id="adminBadgeUser">Admin</div>
         </div>
       </div>
@@ -58,7 +59,7 @@
             <span class="admin-stat-value" id="statTotalUsers">0</span>
             <span class="admin-stat-label">Total Users</span>
           </div>
-          <div class="admin-stat-trend up">+12% this month</div>
+          <div class="admin-stat-trend up" id="statActiveUsers">0 active</div>
         </div>
         <div class="admin-stat-card">
           <div class="admin-stat-icon admin-stat-icon-images">
@@ -68,7 +69,7 @@
             <span class="admin-stat-value" id="statTotalImages">0</span>
             <span class="admin-stat-label">Images Generated</span>
           </div>
-          <div class="admin-stat-trend up">+34% this month</div>
+          <div class="admin-stat-trend up" id="statAvgImages">0 avg/user</div>
         </div>
         <div class="admin-stat-card">
           <div class="admin-stat-icon admin-stat-icon-speed">
@@ -81,14 +82,14 @@
           <div class="admin-stat-trend up">-2s improved</div>
         </div>
         <div class="admin-stat-card">
-          <div class="admin-stat-icon admin-stat-icon-accuracy">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <div class="admin-stat-icon admin-stat-icon-favorites">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
           </div>
           <div class="admin-stat-data">
-            <span class="admin-stat-value">94%</span>
-            <span class="admin-stat-label">System Accuracy</span>
+            <span class="admin-stat-value" id="statTotalFavorites">0</span>
+            <span class="admin-stat-label">Total Favorites</span>
           </div>
-          <div class="admin-stat-trend up">+4% improved</div>
+          <div class="admin-stat-trend up" id="statFavUsers">0 users</div>
         </div>
       </div>
 
@@ -106,6 +107,7 @@
                 <tr>
                   <th>User</th>
                   <th>Role</th>
+                  <th>Plan</th>
                   <th>Joined</th>
                   <th>Images</th>
                 </tr>
@@ -177,6 +179,15 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- Top Generators -->
+      <div class="admin-card admin-card-full">
+        <div class="admin-card-header">
+          <h2 class="admin-card-title">Top Generators</h2>
+          <span class="admin-card-subtitle">Users ranked by images created</span>
+        </div>
+        <div class="top-generators-list" id="topGeneratorsList"></div>
       </div>
 
     </main>

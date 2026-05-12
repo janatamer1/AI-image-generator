@@ -9,6 +9,35 @@ function initStudio(user) {
   const plan = user.plan || 'free';
   document.getElementById('sidebarUserPlan').textContent = plan.charAt(0).toUpperCase() + plan.slice(1) + ' Plan';
   renderChatHistory(user);
+  renderRecentPrompts(user);
+}
+
+function renderRecentPrompts(user) {
+  const section = document.getElementById('recentPromptsSection');
+  const list = document.getElementById('recentPromptsList');
+  if (!section || !list) return;
+
+  const prompts = [];
+  const seen = new Set();
+  for (const chat of (user.chats || []).slice().reverse()) {
+    for (const msg of (chat.messages || []).slice().reverse()) {
+      if (msg.type === 'user' && msg.text && !seen.has(msg.text)) {
+        seen.add(msg.text);
+        prompts.push(msg.text);
+        if (prompts.length >= 5) break;
+      }
+    }
+    if (prompts.length >= 5) break;
+  }
+
+  if (prompts.length === 0) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+  list.innerHTML = prompts.map(p => `
+    <button class="recent-prompt-chip" onclick="fillStudioPrompt(${JSON.stringify(p)})">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;opacity:0.6;"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/></svg>
+      <span>${p.length > 50 ? p.slice(0, 50) + '…' : p}</span>
+    </button>
+  `).join('');
 }
 
 function renderChatHistory(user) {

@@ -6,6 +6,7 @@
   <title>Manage Users - AI ImageGen</title>
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <link rel="stylesheet" href="/shared/styles.css">
+  <link rel="stylesheet" href="/pages/admin-dashboard/style.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -46,11 +47,44 @@
         </button>
       </div>
 
+      <!-- Summary Stats -->
+      <div class="users-summary-row" id="usersSummaryRow">
+        <div class="users-summary-card">
+          <span class="users-summary-value" id="sumTotal">0</span>
+          <span class="users-summary-label">Total Users</span>
+        </div>
+        <div class="users-summary-card">
+          <span class="users-summary-value" id="sumAdmins">0</span>
+          <span class="users-summary-label">Admins</span>
+        </div>
+        <div class="users-summary-card">
+          <span class="users-summary-value" id="sumPro">0</span>
+          <span class="users-summary-label">Pro / Enterprise</span>
+        </div>
+        <div class="users-summary-card">
+          <span class="users-summary-value" id="sumImages">0</span>
+          <span class="users-summary-label">Total Images</span>
+        </div>
+      </div>
+
       <div class="admin-card">
         <div class="users-toolbar">
           <div class="search-bar-inline">
             <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
             <input type="text" class="form-input search-input" id="userSearchInput" placeholder="Search by name or email..." oninput="filterUsers()">
+          </div>
+          <div class="filter-group">
+            <select class="form-input filter-select" id="roleFilter" onchange="filterUsers()">
+              <option value="">All Roles</option>
+              <option value="admin">Admin</option>
+              <option value="user">User</option>
+            </select>
+            <select class="form-input filter-select" id="planFilter" onchange="filterUsers()">
+              <option value="">All Plans</option>
+              <option value="free">Free</option>
+              <option value="pro">Pro</option>
+              <option value="enterprise">Enterprise</option>
+            </select>
           </div>
           <div class="users-count-badge" id="usersCountBadge">0 users</div>
         </div>
@@ -63,6 +97,7 @@
                 <th>Plan</th>
                 <th>Joined</th>
                 <th>Images</th>
+                <th>Favorites</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -80,7 +115,7 @@
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
       <h2 class="modal-title">Add New User</h2>
-      <p class="modal-subtitle">Create a new regular user account.</p>
+      <p class="modal-subtitle">Create a new user account.</p>
       <form onsubmit="event.preventDefault(); handleAddUser();">
         <div class="form-group">
           <label class="form-label">Full Name</label>
@@ -94,13 +129,22 @@
           <label class="form-label">Password</label>
           <input type="password" class="form-input" id="addPassword" placeholder="Min 6 characters" required minlength="6">
         </div>
-        <div class="form-group">
-          <label class="form-label">Plan</label>
-          <select class="form-input" id="addPlan">
-            <option value="free">Free</option>
-            <option value="pro">Pro</option>
-            <option value="enterprise">Enterprise</option>
-          </select>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Role</label>
+            <select class="form-input" id="addRole">
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Plan</label>
+            <select class="form-input" id="addPlan">
+              <option value="free">Free</option>
+              <option value="pro">Pro</option>
+              <option value="enterprise">Enterprise</option>
+            </select>
+          </div>
         </div>
         <div class="form-error" id="addError" style="display:none;"></div>
         <button type="submit" class="btn btn-primary btn-full">Add User</button>
@@ -126,13 +170,22 @@
           <label class="form-label">Email</label>
           <input type="email" class="form-input" id="editEmail" required>
         </div>
-        <div class="form-group">
-          <label class="form-label">Plan</label>
-          <select class="form-input" id="editPlan">
-            <option value="free">Free</option>
-            <option value="pro">Pro</option>
-            <option value="enterprise">Enterprise</option>
-          </select>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Role</label>
+            <select class="form-input" id="editRole">
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Plan</label>
+            <select class="form-input" id="editPlan">
+              <option value="free">Free</option>
+              <option value="pro">Pro</option>
+              <option value="enterprise">Enterprise</option>
+            </select>
+          </div>
         </div>
         <div class="form-group">
           <label class="form-label">New Password <span style="color:var(--text-muted);font-size:0.78rem;">(leave blank to keep)</span></label>
@@ -160,6 +213,18 @@
         <button class="btn btn-outline" onclick="closeModal('deleteUserModal')">Cancel</button>
         <button class="btn btn-danger" onclick="confirmDeleteUser()">Delete</button>
       </div>
+    </div>
+  </div>
+
+  <!-- View Images Modal -->
+  <div class="modal-overlay" id="viewImagesModal">
+    <div class="modal-content modal-lg">
+      <button class="modal-close" onclick="closeModal('viewImagesModal')">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+      <h2 class="modal-title" id="viewImagesTitle">User Images</h2>
+      <p class="modal-subtitle" id="viewImagesSubtitle">Generated images for this user.</p>
+      <div class="view-images-grid" id="viewImagesGrid"></div>
     </div>
   </div>
 
