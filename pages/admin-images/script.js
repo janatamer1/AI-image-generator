@@ -1,7 +1,7 @@
+let allEntries = [];
+
 const admin = requireAuth('admin');
 if (admin) initAdminImages();
-
-let allEntries = [];
 
 function initAdminImages() {
   startClock();

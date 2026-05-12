@@ -1,8 +1,8 @@
-const user = requireAuth('user');
-if (user) initStudio(user);
-
 let currentChatId = null;
 let selectedStyle = '';
+
+const user = requireAuth('user');
+if (user) initStudio(user);
 
 function initStudio(user) {
   document.getElementById('sidebarUserName').textContent = user.name;
