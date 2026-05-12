@@ -68,8 +68,40 @@ function logout() {
   window.location.href = '/index.html';
 }
 
+function getFavorites() {
+  const store = getStore();
+  if (!store.currentUser) return [];
+  const user = store.users.find(u => u.id === store.currentUser);
+  return user ? (user.favorites || []) : [];
+}
+
+function toggleFavorite(imageData) {
+  const store = getStore();
+  if (!store.currentUser) return false;
+  const user = store.users.find(u => u.id === store.currentUser);
+  if (!user) return false;
+  if (!user.favorites) user.favorites = [];
+  const idx = user.favorites.findIndex(f => f.url === imageData.url);
+  if (idx >= 0) {
+    user.favorites.splice(idx, 1);
+    saveStore(store);
+    return false;
+  } else {
+    user.favorites.push(imageData);
+    saveStore(store);
+    return true;
+  }
+}
+
+function isFavorite(url) {
+  return getFavorites().some(f => f.url === url);
+}
+
 window.getStore = getStore;
 window.saveStore = saveStore;
 window.getCurrentUser = getCurrentUser;
 window.requireAuth = requireAuth;
 window.logout = logout;
+window.getFavorites = getFavorites;
+window.toggleFavorite = toggleFavorite;
+window.isFavorite = isFavorite;

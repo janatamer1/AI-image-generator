@@ -2,18 +2,72 @@ const user = requireAuth('user');
 if (user) initImagesPage(user);
 
 let allImages = [];
+let allFavorites = [];
+let activeTab = 'all';
 
 function initImagesPage(user) {
   initNavbar();
   document.getElementById('userBadge').textContent = user.name;
   allImages = user.images || [];
+  allFavorites = getFavorites();
 
   const now = new Date().toISOString().slice(0, 7);
   const thisMonth = allImages.filter(img => img.createdAt && img.createdAt.startsWith(now)).length;
   document.getElementById('totalImagesCount').textContent = allImages.length;
   document.getElementById('thisMonthCount').textContent = thisMonth;
+  document.getElementById('favoritesCount').textContent = allFavorites.length;
 
   renderImages(allImages);
+}
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.getElementById('tab-all').classList.toggle('active', tab === 'all');
+  document.getElementById('tab-favorites').classList.toggle('active', tab === 'favorites');
+  document.getElementById('imageSearchInput').value = '';
+
+  const searchWrap = document.getElementById('searchBarWrap');
+  searchWrap.style.display = tab === 'favorites' ? 'none' : '';
+
+  if (tab === 'favorites') {
+    renderFavorites(allFavorites);
+  } else {
+    renderImages(allImages);
+  }
+}
+
+function renderFavorites(favs) {
+  const grid = document.getElementById('historyGrid');
+  if (!grid) return;
+
+  if (favs.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--text-muted);opacity:0.3;">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <p>No favorites yet. Heart images on the <a href="/index.html#gallery" style="color:var(--accent-purple);">homepage gallery</a> to save them here.</p>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = favs.map(img => `
+    <div class="history-card" onclick="openImageModal('${img.url}', '${img.prompt.replace(/'/g, "\\'")}')">
+      <div class="history-card-img-wrap">
+        <img src="${img.url}" alt="${img.prompt}" loading="lazy">
+        <div class="history-card-overlay">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <span class="fav-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </span>
+      </div>
+      <div class="history-card-info">
+        <p title="${img.prompt}">${img.prompt}</p>
+        <span>Gallery favorite</span>
+      </div>
+    </div>
+  `).join('');
 }
 
 function renderImages(images) {
@@ -48,6 +102,7 @@ function renderImages(images) {
 }
 
 function filterImages() {
+  if (activeTab === 'favorites') return;
   const q = document.getElementById('imageSearchInput').value.toLowerCase().trim();
   const filtered = q ? allImages.filter(img => img.prompt.toLowerCase().includes(q)) : allImages;
   renderImages(filtered);

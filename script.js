@@ -90,6 +90,44 @@ function downloadImage() {
   document.body.removeChild(a);
 }
 
+const GALLERY_IMAGES = [
+  { url: 'https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=800', prompt: 'Misty forest at dawn with golden light rays' },
+  { url: 'https://images.pexels.com/photos/3573383/pexels-photo-3573383.jpeg?auto=compress&cs=tinysrgb&w=800', prompt: 'Dark minimalist luxury interior design' },
+  { url: 'https://images.pexels.com/photos/1001682/pexels-photo-1001682.jpeg?auto=compress&cs=tinysrgb&w=800', prompt: 'Dramatic ocean waves at sunset' },
+];
+
+function initGalleryFavorites() {
+  GALLERY_IMAGES.forEach((img, i) => {
+    const btn = document.getElementById(`fav-${i}`);
+    if (!btn) return;
+    if (isFavorite(img.url)) {
+      btn.classList.add('active');
+    }
+  });
+}
+
+function toggleGalleryFavorite(event, index, url, prompt) {
+  event.stopPropagation();
+  const user = getCurrentUser();
+  if (!user) {
+    window.location.href = '/pages/login/index.html';
+    return;
+  }
+  const btn = document.getElementById(`fav-${index}`);
+  const isFav = toggleFavorite({ url, prompt, source: 'gallery' });
+  btn.classList.toggle('active', isFav);
+
+  const toast = document.createElement('div');
+  toast.className = 'fav-toast';
+  toast.textContent = isFav ? '♥ Saved to Favorites' : '♡ Removed from Favorites';
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('show'));
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 300);
+  }, 2000);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const input = document.getElementById('promptInput');
   if (input) {
@@ -97,8 +135,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.key === 'Enter') generateImage();
     });
   }
+  initGalleryFavorites();
 });
 
 window.generateImage = generateImage;
 window.downloadImage = downloadImage;
 window.fillPrompt = fillPrompt;
+window.toggleGalleryFavorite = toggleGalleryFavorite;
