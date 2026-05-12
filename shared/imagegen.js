@@ -4,7 +4,7 @@
    3. Never race models; always prefer quality over speed.
    4. Auto-enrich short/vague prompts so the model has enough context. */
 
-const FLUX_TIMEOUT        = 55000;
+const FLUX_TIMEOUT = 55000;
 const FLUX_SCHNELL_TIMEOUT = 35000;
 
 /* Enrich very short prompts so the model understands the intent clearly */
@@ -21,18 +21,30 @@ function enrichPrompt(prompt) {
 
 function buildPollinationsUrl(prompt, model, seed, enhance) {
   const encoded = encodeURIComponent(prompt.trim());
-  return `https://image.pollinations.ai/prompt/${encoded}?width=1024&height=1024&nologo=true&enhance=${enhance}&model=${model}&seed=${seed}&safe=false`;
+  return `https://image.pollinations.ai/prompt/${encoded}?width=1024&height=1024&nologo=true&enhance=${enhance}&model=${model}&seed=${seed}`;
 }
 
 function loadImageUrl(url, timeoutMs) {
   return new Promise((resolve, reject) => {
     const img = new Image();
+
     const timer = setTimeout(() => {
-      img.src = '';
-      reject(new Error('timeout'));
+      img.src = "";
+      reject(new Error("Image generation timed out"));
     }, timeoutMs);
-    img.onload = () => { clearTimeout(timer); resolve(url); };
-    img.onerror = () => { clearTimeout(timer); reject(new Error('load error')); };
+
+    img.onload = () => {
+      clearTimeout(timer);
+      resolve(url);
+    };
+
+    img.onerror = () => {
+      clearTimeout(timer);
+      console.error("Failed image URL:", url);
+      reject(new Error("Image failed to load"));
+    };
+
+    img.referrerPolicy = "no-referrer";
     img.src = url;
   });
 }
@@ -44,7 +56,7 @@ async function generateImageFromPrompt(prompt, onAttempt) {
   /* ── Phase 1: flux — highest accuracy, prompt-faithful ── */
   if (onAttempt) onAttempt(1, 2);
 
-  const fluxUrl = buildPollinationsUrl(enriched, 'flux', seed, 'true');
+  const fluxUrl = buildPollinationsUrl(enriched, "flux", seed, "true");
 
   try {
     return await loadImageUrl(fluxUrl, FLUX_TIMEOUT);
@@ -55,7 +67,12 @@ async function generateImageFromPrompt(prompt, onAttempt) {
   /* ── Phase 2: flux-schnell — faster, still accurate ── */
   if (onAttempt) onAttempt(2, 2);
 
-  const schnellUrl = buildPollinationsUrl(enriched, 'flux-schnell', seed, 'true');
+  const schnellUrl = buildPollinationsUrl(
+    enriched,
+    "flux-schnell",
+    seed,
+    "true",
+  );
   return await loadImageUrl(schnellUrl, FLUX_SCHNELL_TIMEOUT);
 }
 

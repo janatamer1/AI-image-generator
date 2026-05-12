@@ -1,314 +1,603 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI ImageGen - Professional AI Image Generation</title>
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-  <link rel="stylesheet" href="/shared/styles.css">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <!-- Navbar -->
-  <nav class="navbar" id="navbar">
-    <div class="container navbar-container">
-      <a href="/index.html" class="logo-text">AI <span class="gradient-text">ImageGen</span></a>
-      <ul class="navbar-links">
-        <li><a href="#home" class="nav-link active">Home</a></li>
-        <li><a href="#gallery" class="nav-link">Gallery</a></li>
-        <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
-        <li><a href="/pages/explore/index.html" class="nav-link">Explore</a></li>
-        <li><a href="/pages/pricing/index.html" class="nav-link">Pricing</a></li>
-      </ul>
-      <div class="navbar-actions" id="homeAuthActions">
-        <a href="/pages/login/index.html" class="btn btn-ghost">Log In</a>
-        <a href="/pages/register/index.html" class="btn btn-primary">Get Started Free</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI ImageGen - Professional AI Image Generation</title>
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="stylesheet" href="/shared/styles.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+      <div class="container navbar-container">
+        <a href="/index.html" class="logo-text"
+          >AI <span class="gradient-text">ImageGen</span></a
+        >
+        <ul class="navbar-links">
+          <li><a href="#home" class="nav-link active">Home</a></li>
+          <li><a href="#gallery" class="nav-link">Gallery</a></li>
+          <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+          <li>
+            <a href="/pages/explore/index.html" class="nav-link">Explore</a>
+          </li>
+          <li>
+            <a href="/pages/pricing/index.html" class="nav-link">Pricing</a>
+          </li>
+        </ul>
+        <div class="navbar-actions" id="homeAuthActions">
+          <a href="/pages/login/index.html" class="btn btn-ghost">Log In</a>
+          <a href="/pages/register/index.html" class="btn btn-primary"
+            >Get Started Free</a
+          >
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
 
-  <!-- Hero Section -->
-  <section class="hero" id="home">
-    <div class="hero-bg-effects">
-      <div class="hero-orb orb-1"></div>
-      <div class="hero-orb orb-2"></div>
-      <div class="hero-orb orb-3"></div>
-      <div class="hero-particles" id="heroParticles"></div>
-    </div>
-    <div class="container hero-content">
-      <div class="hero-badge">
-        <span class="badge-dot"></span>
-        <span>Powered by Advanced AI · Trusted by 50,000+ creators</span>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+      <div class="hero-bg-effects">
+        <div class="hero-orb orb-1"></div>
+        <div class="hero-orb orb-2"></div>
+        <div class="hero-orb orb-3"></div>
+        <div class="hero-particles" id="heroParticles"></div>
       </div>
-      <h1 class="hero-title">
-        Turn your words into<br>
-        <span class="gradient-text typed-text" id="typedText">stunning visuals</span>
-      </h1>
-      <p class="hero-subtitle">
-        Describe any image you can imagine. Our AI creates photorealistic, high-resolution artwork in seconds — no design skills needed.
-      </p>
+      <div class="container hero-content">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          <span>Powered by Advanced AI · Trusted by 50,000+ creators</span>
+        </div>
+        <h1 class="hero-title">
+          Turn your words into<br />
+          <span class="gradient-text typed-text" id="typedText"
+            >stunning visuals</span
+          >
+        </h1>
+        <p class="hero-subtitle">
+          Describe any image you can imagine. Our AI creates photorealistic,
+          high-resolution artwork in seconds — no design skills needed.
+        </p>
 
-      <!-- Image Generator UI -->
-      <div class="generator-container" id="generatorUI">
-        <div class="generator-inner">
-          <div class="generator-suggestions" id="genSuggestions">
-            <button class="suggestion-chip" onclick="fillPrompt('A majestic lion at golden hour')">A majestic lion at golden hour</button>
-            <button class="suggestion-chip" onclick="fillPrompt('Futuristic cyberpunk city at night')">Futuristic cyberpunk city</button>
-            <button class="suggestion-chip" onclick="fillPrompt('Serene mountain lake at sunrise')">Serene mountain lake</button>
+        <!-- Image Generator UI -->
+        <div class="generator-container" id="generatorUI">
+          <div class="generator-inner">
+            <div class="generator-suggestions" id="genSuggestions">
+              <button
+                class="suggestion-chip"
+                onclick="fillPrompt('A majestic lion at golden hour')"
+              >
+                A majestic lion at golden hour
+              </button>
+              <button
+                class="suggestion-chip"
+                onclick="fillPrompt('Futuristic cyberpunk city at night')"
+              >
+                Futuristic cyberpunk city
+              </button>
+              <button
+                class="suggestion-chip"
+                onclick="fillPrompt('Serene mountain lake at sunrise')"
+              >
+                Serene mountain lake
+              </button>
+            </div>
+            <div class="generator-input-row">
+              <input
+                type="text"
+                id="promptInput"
+                class="prompt-input"
+                placeholder="Describe your image... (e.g. A golden retriever playing in autumn leaves)"
+              />
+              <button
+                class="btn btn-primary generate-btn"
+                id="generateBtn"
+                onclick="generateImage()"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"
+                  />
+                </svg>
+                Generate
+              </button>
+            </div>
           </div>
-          <div class="generator-input-row">
-            <input type="text" id="promptInput" class="prompt-input"
-              placeholder="Describe your image... (e.g. A golden retriever playing in autumn leaves)">
-            <button class="btn btn-primary generate-btn" id="generateBtn" onclick="generateImage()">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+        </div>
+
+        <!-- Generator Output -->
+        <div class="generator-output" id="generatorOutput">
+          <div class="output-loading" id="loadingState">
+            <div class="loading-ring"></div>
+            <div class="loading-text">
+              <p>Creating your image</p>
+              <span id="loadingTimer">15</span><span>s remaining</span>
+            </div>
+          </div>
+          <img
+            src=""
+            alt="Generated AI Image"
+            class="output-image"
+            id="outputImage"
+          />
+          <div class="output-actions" id="outputActions">
+            <div class="output-prompt-label" id="outputPromptText"></div>
+            <div class="output-action-btns">
+              <button class="btn btn-ghost btn-sm" onclick="generateImage()">
+                Regenerate
+              </button>
+              <button class="btn btn-primary btn-sm" onclick="downloadImage()">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                Download
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <span class="hero-stat-value">50K+</span>
+            <span class="hero-stat-label">Users</span>
+          </div>
+          <div class="hero-stat-divider"></div>
+          <div class="hero-stat">
+            <span class="hero-stat-value">2M+</span>
+            <span class="hero-stat-label">Images Created</span>
+          </div>
+          <div class="hero-stat-divider"></div>
+          <div class="hero-stat">
+            <span class="hero-stat-value">~12s</span>
+            <span class="hero-stat-label">Avg. Speed</span>
+          </div>
+          <div class="hero-stat-divider"></div>
+          <div class="hero-stat">
+            <span class="hero-stat-value">4.9★</span>
+            <span class="hero-stat-label">Rated</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery" id="gallery">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-eyebrow">Gallery</p>
+          <h2 class="section-title">
+            Created with <span class="gradient-text">AI ImageGen</span>
+          </h2>
+          <p class="section-desc">
+            A glimpse of what our AI can create from simple text prompts.
+          </p>
+        </div>
+        <div class="gallery-grid">
+          <div class="gallery-card">
+            <img
+              src="https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=800"
+              alt="Misty forest at dawn"
+              loading="lazy"
+            />
+            <button
+              class="gallery-fav-btn"
+              id="fav-0"
+              onclick="
+                toggleGalleryFavorite(
+                  event,
+                  0,
+                  'https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=800',
+                  'Misty forest at dawn with golden light rays',
+                )
+              "
+              title="Save to Favorites"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+              >
+                <path
+                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                />
               </svg>
-              Generate
             </button>
+            <div class="gallery-card-overlay">
+              <p>"Misty forest at dawn with golden light rays"</p>
+            </div>
           </div>
-        </div>
-      </div>
-
-      <!-- Generator Output -->
-      <div class="generator-output" id="generatorOutput">
-        <div class="output-loading" id="loadingState">
-          <div class="loading-ring"></div>
-          <div class="loading-text">
-            <p>Creating your image</p>
-            <span id="loadingTimer">15</span><span>s remaining</span>
-          </div>
-        </div>
-        <img src="" alt="Generated AI Image" class="output-image" id="outputImage">
-        <div class="output-actions" id="outputActions">
-          <div class="output-prompt-label" id="outputPromptText"></div>
-          <div class="output-action-btns">
-            <button class="btn btn-ghost btn-sm" onclick="generateImage()">Regenerate</button>
-            <button class="btn btn-primary btn-sm" onclick="downloadImage()">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              Download
+          <div class="gallery-card">
+            <img
+              src="https://images.pexels.com/photos/3573383/pexels-photo-3573383.jpeg?auto=compress&cs=tinysrgb&w=800"
+              alt="Dark modern architecture"
+              loading="lazy"
+            />
+            <button
+              class="gallery-fav-btn"
+              id="fav-1"
+              onclick="
+                toggleGalleryFavorite(
+                  event,
+                  1,
+                  'https://images.pexels.com/photos/3573383/pexels-photo-3573383.jpeg?auto=compress&cs=tinysrgb&w=800',
+                  'Dark minimalist luxury interior design',
+                )
+              "
+              title="Save to Favorites"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+              >
+                <path
+                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                />
+              </svg>
             </button>
+            <div class="gallery-card-overlay">
+              <p>"Dark minimalist luxury interior design"</p>
+            </div>
+          </div>
+          <div class="gallery-card">
+            <img
+              src="https://images.pexels.com/photos/1001682/pexels-photo-1001682.jpeg?auto=compress&cs=tinysrgb&w=800"
+              alt="Ocean sunset"
+              loading="lazy"
+            />
+            <button
+              class="gallery-fav-btn"
+              id="fav-2"
+              onclick="
+                toggleGalleryFavorite(
+                  event,
+                  2,
+                  'https://images.pexels.com/photos/1001682/pexels-photo-1001682.jpeg?auto=compress&cs=tinysrgb&w=800',
+                  'Dramatic ocean waves at sunset',
+                )
+              "
+              title="Save to Favorites"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+              >
+                <path
+                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                />
+              </svg>
+            </button>
+            <div class="gallery-card-overlay">
+              <p>"Dramatic ocean waves at sunset"</p>
+            </div>
           </div>
         </div>
       </div>
+    </section>
 
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <span class="hero-stat-value">50K+</span>
-          <span class="hero-stat-label">Users</span>
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-eyebrow">Simple Process</p>
+          <h2 class="section-title">
+            Create in <span class="gradient-text">3 Easy Steps</span>
+          </h2>
+          <p class="section-desc">From idea to image in under 15 seconds.</p>
         </div>
-        <div class="hero-stat-divider"></div>
-        <div class="hero-stat">
-          <span class="hero-stat-value">2M+</span>
-          <span class="hero-stat-label">Images Created</span>
-        </div>
-        <div class="hero-stat-divider"></div>
-        <div class="hero-stat">
-          <span class="hero-stat-value">~12s</span>
-          <span class="hero-stat-label">Avg. Speed</span>
-        </div>
-        <div class="hero-stat-divider"></div>
-        <div class="hero-stat">
-          <span class="hero-stat-value">4.9★</span>
-          <span class="hero-stat-label">Rated</span>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-number">01</div>
+            <div class="step-icon">
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M12 20h9" />
+                <path
+                  d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"
+                />
+              </svg>
+            </div>
+            <h3>Describe Your Vision</h3>
+            <p>
+              Type a detailed description of the image you want. The more
+              specific you are, the better the result.
+            </p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">02</div>
+            <div class="step-icon">
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M12 2v4" />
+                <path d="M12 18v4" />
+                <path d="M4.93 4.93l2.83 2.83" />
+                <path d="M16.24 16.24l2.83 2.83" />
+                <path d="M2 12h4" />
+                <path d="M18 12h4" />
+                <path d="M4.93 19.07l2.83-2.83" />
+                <path d="M16.24 7.76l2.83-2.83" />
+              </svg>
+            </div>
+            <h3>AI Generates</h3>
+            <p>
+              Our powerful AI model processes your prompt and renders a unique,
+              high-quality image in seconds.
+            </p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">03</div>
+            <div class="step-icon">
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+            </div>
+            <h3>Download & Share</h3>
+            <p>
+              Preview your creation and download it in full resolution, ready to
+              use anywhere.
+            </p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Gallery Section -->
-  <section class="gallery" id="gallery">
-    <div class="container">
-      <div class="section-header">
-        <p class="section-eyebrow">Gallery</p>
-        <h2 class="section-title">Created with <span class="gradient-text">AI ImageGen</span></h2>
-        <p class="section-desc">A glimpse of what our AI can create from simple text prompts.</p>
+    <!-- Features Section -->
+    <section class="features-section">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-eyebrow">Why Choose Us</p>
+          <h2 class="section-title">
+            Everything you need to
+            <span class="gradient-text">create faster</span>
+          </h2>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+            </div>
+            <h3>Lightning Fast</h3>
+            <p>Generate stunning images in under 15 seconds, not minutes.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+            </div>
+            <h3>Safe & Secure</h3>
+            <p>Your prompts and generated images are private and protected.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+                <path d="M21 15l-5-5L5 21" />
+              </svg>
+            </div>
+            <h3>High Resolution</h3>
+            <p>
+              Download images in high resolution, perfect for print and digital
+              use.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                />
+              </svg>
+            </div>
+            <h3>Chat History</h3>
+            <p>
+              All your generations are saved and organized in conversation
+              threads.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"
+                />
+              </svg>
+            </div>
+            <h3>Smart AI</h3>
+            <p>
+              Context-aware generation that understands complex, detailed
+              prompts.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="12" y1="1" x2="12" y2="23" />
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+              </svg>
+            </div>
+            <h3>Flexible Plans</h3>
+            <p>
+              From free to enterprise — plans that fit every creator's needs.
+            </p>
+          </div>
+        </div>
       </div>
-      <div class="gallery-grid">
-        <div class="gallery-card">
-          <img src="https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Misty forest at dawn" loading="lazy">
-          <button class="gallery-fav-btn" id="fav-0" onclick="toggleGalleryFavorite(event, 0, 'https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=800', 'Misty forest at dawn with golden light rays')" title="Save to Favorites">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </button>
-          <div class="gallery-card-overlay">
-            <p>"Misty forest at dawn with golden light rays"</p>
-          </div>
-        </div>
-        <div class="gallery-card">
-          <img src="https://images.pexels.com/photos/3573383/pexels-photo-3573383.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Dark modern architecture" loading="lazy">
-          <button class="gallery-fav-btn" id="fav-1" onclick="toggleGalleryFavorite(event, 1, 'https://images.pexels.com/photos/3573383/pexels-photo-3573383.jpeg?auto=compress&cs=tinysrgb&w=800', 'Dark minimalist luxury interior design')" title="Save to Favorites">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </button>
-          <div class="gallery-card-overlay">
-            <p>"Dark minimalist luxury interior design"</p>
-          </div>
-        </div>
-        <div class="gallery-card">
-          <img src="https://images.pexels.com/photos/1001682/pexels-photo-1001682.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Ocean sunset" loading="lazy">
-          <button class="gallery-fav-btn" id="fav-2" onclick="toggleGalleryFavorite(event, 2, 'https://images.pexels.com/photos/1001682/pexels-photo-1001682.jpeg?auto=compress&cs=tinysrgb&w=800', 'Dramatic ocean waves at sunset')" title="Save to Favorites">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </button>
-          <div class="gallery-card-overlay">
-            <p>"Dramatic ocean waves at sunset"</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- How It Works -->
-  <section class="how-it-works" id="how-it-works">
-    <div class="container">
-      <div class="section-header">
-        <p class="section-eyebrow">Simple Process</p>
-        <h2 class="section-title">Create in <span class="gradient-text">3 Easy Steps</span></h2>
-        <p class="section-desc">From idea to image in under 15 seconds.</p>
-      </div>
-      <div class="steps-grid">
-        <div class="step-card">
-          <div class="step-number">01</div>
-          <div class="step-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-card">
+          <div class="cta-orbs">
+            <div class="cta-orb-1"></div>
+            <div class="cta-orb-2"></div>
           </div>
-          <h3>Describe Your Vision</h3>
-          <p>Type a detailed description of the image you want. The more specific you are, the better the result.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-number">02</div>
-          <div class="step-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/></svg>
+          <div class="cta-content">
+            <h2>
+              Ready to create something
+              <span class="gradient-text">extraordinary?</span>
+            </h2>
+            <p>
+              Join 50,000+ creators and start generating stunning images today.
+              Free plan available.
+            </p>
+            <div class="cta-actions">
+              <a
+                href="/pages/register/index.html"
+                class="btn btn-primary btn-lg"
+                >Start for Free</a
+              >
+              <a href="/pages/pricing/index.html" class="btn btn-outline btn-lg"
+                >View Pricing</a
+              >
+            </div>
           </div>
-          <h3>AI Generates</h3>
-          <p>Our powerful AI model processes your prompt and renders a unique, high-quality image in seconds.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-number">03</div>
-          <div class="step-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          </div>
-          <h3>Download & Share</h3>
-          <p>Preview your creation and download it in full resolution, ready to use anywhere.</p>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Features Section -->
-  <section class="features-section">
-    <div class="container">
-      <div class="section-header">
-        <p class="section-eyebrow">Why Choose Us</p>
-        <h2 class="section-title">Everything you need to <span class="gradient-text">create faster</span></h2>
-      </div>
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <a href="/index.html" class="logo-text"
+              >AI <span class="gradient-text">ImageGen</span></a
+            >
+            <p class="footer-desc">
+              Professional AI image generation platform. Create stunning visuals
+              from text in seconds.
+            </p>
           </div>
-          <h3>Lightning Fast</h3>
-          <p>Generate stunning images in under 15 seconds, not minutes.</p>
+          <div class="footer-links-group">
+            <h4>Platform</h4>
+            <ul class="footer-links">
+              <li><a href="#home">Home</a></li>
+              <li><a href="#gallery">Gallery</a></li>
+              <li><a href="#how-it-works">How It Works</a></li>
+              <li><a href="/pages/pricing/index.html">Pricing</a></li>
+            </ul>
+          </div>
+          <div class="footer-links-group">
+            <h4>Account</h4>
+            <ul class="footer-links">
+              <li><a href="/pages/login/index.html">Log In</a></li>
+              <li><a href="/pages/register/index.html">Sign Up Free</a></li>
+              <li><a href="/pages/user-dashboard/index.html">Dashboard</a></li>
+            </ul>
+          </div>
+          <div class="footer-links-group">
+            <h4>Legal</h4>
+            <ul class="footer-links">
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Terms of Service</a></li>
+              <li><a href="#">Cookie Policy</a></li>
+            </ul>
+          </div>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          </div>
-          <h3>Safe & Secure</h3>
-          <p>Your prompts and generated images are private and protected.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-          </div>
-          <h3>High Resolution</h3>
-          <p>Download images in high resolution, perfect for print and digital use.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          </div>
-          <h3>Chat History</h3>
-          <p>All your generations are saved and organized in conversation threads.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-          </div>
-          <h3>Smart AI</h3>
-          <p>Context-aware generation that understands complex, detailed prompts.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-          </div>
-          <h3>Flexible Plans</h3>
-          <p>From free to enterprise — plans that fit every creator's needs.</p>
+        <div class="footer-bottom">
+          <p>&copy; 2026 AI ImageGen. All rights reserved.</p>
         </div>
       </div>
-    </div>
-  </section>
+    </footer>
 
-  <!-- CTA Section -->
-  <section class="cta-section">
-    <div class="container">
-      <div class="cta-card">
-        <div class="cta-orbs">
-          <div class="cta-orb-1"></div>
-          <div class="cta-orb-2"></div>
-        </div>
-        <div class="cta-content">
-          <h2>Ready to create something <span class="gradient-text">extraordinary?</span></h2>
-          <p>Join 50,000+ creators and start generating stunning images today. Free plan available.</p>
-          <div class="cta-actions">
-            <a href="/pages/register/index.html" class="btn btn-primary btn-lg">Start for Free</a>
-            <a href="/pages/pricing/index.html" class="btn btn-outline btn-lg">View Pricing</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <a href="/index.html" class="logo-text">AI <span class="gradient-text">ImageGen</span></a>
-          <p class="footer-desc">Professional AI image generation platform. Create stunning visuals from text in seconds.</p>
-        </div>
-        <div class="footer-links-group">
-          <h4>Platform</h4>
-          <ul class="footer-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#gallery">Gallery</a></li>
-            <li><a href="#how-it-works">How It Works</a></li>
-            <li><a href="/pages/pricing/index.html">Pricing</a></li>
-          </ul>
-        </div>
-        <div class="footer-links-group">
-          <h4>Account</h4>
-          <ul class="footer-links">
-            <li><a href="/pages/login/index.html">Log In</a></li>
-            <li><a href="/pages/register/index.html">Sign Up Free</a></li>
-            <li><a href="/pages/user-dashboard/index.html">Dashboard</a></li>
-          </ul>
-        </div>
-        <div class="footer-links-group">
-          <h4>Legal</h4>
-          <ul class="footer-links">
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Terms of Service</a></li>
-            <li><a href="#">Cookie Policy</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2026 AI ImageGen. All rights reserved.</p>
-      </div>
-    </div>
-  </footer>
-
-  <script type="module" src="/shared/store.js"></script>
-  <script type="module" src="/shared/navbar.js"></script>
-  <script type="module" src="/shared/imagegen.js"></script>
-  <script type="module" src="script.js"></script>
-</body>
+    <script type="module" src="/shared/store.js"></script>
+    <script type="module" src="/shared/navbar.js"></script>
+    <script type="module" src="/shared/imagegen.js"></script>
+    <script type="module" src="script.js"></script>
+  </body>
 </html>
