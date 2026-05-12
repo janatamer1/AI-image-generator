@@ -50,7 +50,7 @@ function generateImage() {
   outputImage.style.display = 'none';
   outputActions.style.display = 'none';
   function buildLoadingHTML(attempt) {
-    const label = attempt === 2 ? 'AI busy — finding a photo match…' : 'Creating your image…';
+    const label = 'Creating your image…';
     return `
       <div class="loading-ring"></div>
       <div class="loading-text">

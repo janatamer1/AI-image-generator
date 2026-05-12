@@ -211,11 +211,7 @@ function updateLoadingMessage(id, attempt, max) {
   if (!el) return;
   const textEl = el.querySelector('.gen-text span:first-child');
   if (!textEl) return;
-  if (attempt === 1) {
-    textEl.textContent = 'Generating your image...';
-  } else {
-    textEl.textContent = 'AI is busy — finding a photo match...';
-  }
+  textEl.textContent = 'Generating your image...';
 }
 
 function removeLoadingMessage(id) {
