@@ -92,6 +92,9 @@ function renderImages(images) {
         <div class="history-card-overlay">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
         </div>
+        <button class="card-delete-btn" onclick="event.stopPropagation(); deleteOneImage('${img.url.replace(/'/g, "\\'")}')" title="Delete image">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
       </div>
       <div class="history-card-info">
         <p title="${img.prompt}">${img.prompt}</p>
@@ -143,6 +146,19 @@ function downloadModalImage() {
   document.body.removeChild(a);
 }
 
+function deleteOneImage(imgUrl) {
+  const store = getStore();
+  const u = store.users.find(u => u.id === store.currentUser);
+  if (!u) return;
+  u.images = (u.images || []).filter(img => img.url !== imgUrl);
+  saveStore(store);
+  allImages = u.images;
+  const now = new Date().toISOString().slice(0, 7);
+  document.getElementById('totalImagesCount').textContent = allImages.length;
+  document.getElementById('thisMonthCount').textContent = allImages.filter(img => img.createdAt && img.createdAt.startsWith(now)).length;
+  filterImages();
+}
+
 function clearMyImages() {
   if (!confirm('This will permanently delete all your generated images. Are you sure?')) return;
   const store = getStore();
@@ -165,3 +181,4 @@ window.closeImageModal = closeImageModal;
 window.downloadModalImage = downloadModalImage;
 window.regenerateImage = regenerateImage;
 window.clearMyImages = clearMyImages;
+window.deleteOneImage = deleteOneImage;

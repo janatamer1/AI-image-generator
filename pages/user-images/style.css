@@ -246,6 +246,28 @@
   white-space: nowrap;
 }
 
+.card-delete-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(239,68,68,0.85);
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s, background 0.2s;
+  z-index: 10;
+}
+
+.history-card:hover .card-delete-btn { opacity: 1; }
+.card-delete-btn:hover { background: #dc2626; }
+
 @media (max-width: 480px) {
   .history-grid { grid-template-columns: 1fr 1fr; }
   .images-stats { max-width: 100%; }

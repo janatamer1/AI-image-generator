@@ -86,6 +86,9 @@ function renderGrid(entries) {
         <div class="ai-card-overlay">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
         </div>
+        <button class="card-delete-btn" onclick="event.stopPropagation(); deleteImage('${escapeAttr(u.id)}','${escapeAttr(img.url)}')" title="Delete image">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
       </div>
       <div class="ai-card-info">
         <div class="ai-card-user">
@@ -131,6 +134,17 @@ function escapeAttr(str) {
   return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
 }
 
+function deleteImage(userId, imgUrl) {
+  const store = getStore();
+  const u = store.users.find(u => u.id === userId);
+  if (!u) return;
+  u.images = (u.images || []).filter(img => img.url !== imgUrl);
+  saveStore(store);
+  buildEntries();
+  renderSummary();
+  filterImages();
+}
+
 function clearAllImages() {
   if (!confirm('This will permanently delete all images for every user. Are you sure?')) return;
   const store = getStore();
@@ -147,3 +161,4 @@ window.openImgModal = openImgModal;
 window.closeImgModal = closeImgModal;
 window.downloadAiModal = downloadAiModal;
 window.clearAllImages = clearAllImages;
+window.deleteImage = deleteImage;
