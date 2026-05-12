@@ -143,8 +143,25 @@ function downloadModalImage() {
   document.body.removeChild(a);
 }
 
+function clearMyImages() {
+  if (!confirm('This will permanently delete all your generated images. Are you sure?')) return;
+  const store = getStore();
+  const u = store.users.find(u => u.id === store.currentUser);
+  if (!u) return;
+  u.images = [];
+  u.favorites = [];
+  saveStore(store);
+  allImages = [];
+  allFavorites = [];
+  document.getElementById('totalImagesCount').textContent = '0';
+  document.getElementById('thisMonthCount').textContent = '0';
+  document.getElementById('favoritesCount').textContent = '0';
+  renderImages([]);
+}
+
 window.filterImages = filterImages;
 window.openImageModal = openImageModal;
 window.closeImageModal = closeImageModal;
 window.downloadModalImage = downloadModalImage;
 window.regenerateImage = regenerateImage;
+window.clearMyImages = clearMyImages;

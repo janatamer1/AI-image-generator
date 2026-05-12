@@ -131,7 +131,19 @@ function escapeAttr(str) {
   return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
 }
 
+function clearAllImages() {
+  if (!confirm('This will permanently delete all images for every user. Are you sure?')) return;
+  const store = getStore();
+  store.users.forEach(u => { u.images = []; u.favorites = []; });
+  saveStore(store);
+  allEntries = [];
+  renderSummary();
+  renderGrid([]);
+  document.getElementById('imgCount').textContent = '0 images';
+}
+
 window.filterImages = filterImages;
 window.openImgModal = openImgModal;
 window.closeImgModal = closeImgModal;
 window.downloadAiModal = downloadAiModal;
+window.clearAllImages = clearAllImages;
