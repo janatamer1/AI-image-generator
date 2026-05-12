@@ -1,27 +1,38 @@
 const STORAGE_KEY = 'aiimagegen_data';
 const SESSION_KEY = 'aiimagegen_session';
 
+function defaultStore() {
+  return {
+    users: [
+      {
+        id: 'admin1',
+        name: 'Admin',
+        email: 'admin@imagegen.com',
+        password: 'admin123',
+        role: 'admin',
+        plan: 'enterprise',
+        joinedAt: '2026-02-20',
+        images: [],
+        chats: []
+      }
+    ]
+  };
+}
+
 function getStore() {
   const raw = localStorage.getItem(STORAGE_KEY);
   let store;
   if (raw) {
-    store = JSON.parse(raw);
+    try {
+      store = JSON.parse(raw);
+    } catch (e) {
+      console.warn('Store data corrupted, resetting.', e);
+      localStorage.removeItem(STORAGE_KEY);
+      store = defaultStore();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+    }
   } else {
-    store = {
-      users: [
-        {
-          id: 'admin1',
-          name: 'Admin',
-          email: 'admin@imagegen.com',
-          password: 'admin123',
-          role: 'admin',
-          plan: 'enterprise',
-          joinedAt: '2026-02-20',
-          images: [],
-          chats: []
-        }
-      ]
-    };
+    store = defaultStore();
     localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
   }
   store.currentUser = sessionStorage.getItem(SESSION_KEY);
