@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pricing - AI ImageGen</title>
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <link rel="stylesheet" href="/shared/styles.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container navbar-container">
+      <a href="/index.html" class="logo-text">AI <span class="gradient-text">ImageGen</span></a>
+      <ul class="navbar-links">
+        <li><a href="/index.html" class="nav-link">Home</a></li>
+        <li><a href="/index.html#gallery" class="nav-link">Gallery</a></li>
+        <li><a href="/pages/pricing/index.html" class="nav-link active">Pricing</a></li>
+      </ul>
+      <div class="navbar-actions" id="pricingNavActions">
+        <a href="/pages/login/index.html" class="btn btn-ghost">Log In</a>
+        <a href="/pages/register/index.html" class="btn btn-primary">Get Started</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="pricing-main">
+    <div class="container">
+
+      <!-- Header -->
+      <div class="pricing-header">
+        <p class="section-eyebrow">Pricing</p>
+        <h1 class="pricing-title">Simple, transparent pricing</h1>
+        <p class="pricing-subtitle">Choose the plan that fits your creative needs. Upgrade or downgrade anytime.</p>
+        <div class="billing-toggle">
+          <span class="billing-label active" id="monthlyLabel">Monthly</span>
+          <div class="toggle-switch" onclick="toggleBilling()">
+            <div class="toggle-knob" id="billingKnob"></div>
+          </div>
+          <span class="billing-label" id="yearlyLabel">Yearly <span class="save-badge">Save 20%</span></span>
+        </div>
+      </div>
+
+      <!-- Plans Grid -->
+      <div class="plans-grid">
+
+        <!-- Free -->
+        <div class="plan-card">
+          <div class="plan-header">
+            <div class="plan-icon plan-icon-free">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </div>
+            <div>
+              <h2 class="plan-name">Free</h2>
+              <p class="plan-desc">Perfect for trying out the platform</p>
+            </div>
+          </div>
+          <div class="plan-price">
+            <span class="price-amount">$0</span>
+            <span class="price-period">/month</span>
+          </div>
+          <a href="/pages/register/index.html" class="btn btn-outline plan-btn">Get Started Free</a>
+          <ul class="plan-features">
+            <li class="feature-item"><span class="feature-check">✓</span> <span>10 image generations/month</span></li>
+            <li class="feature-item"><span class="feature-check">✓</span> <span>Standard resolution (512×512)</span></li>
+            <li class="feature-item"><span class="feature-check">✓</span> <span>Basic prompt support</span></li>
+            <li class="feature-item"><span class="feature-check">✓</span> <span>Image history (last 30 days)</span></li>
+            <li class="feature-item"><span class="feature-check">✓</span> <span>Download as JPG</span></li>
+            <li class="feature-item feature-disabled"><span class="feature-x">✗</span> <span>Priority generation</span></li>
+            <li class="feature-item feature-disabled"><span class="feature-x">✗</span> <span>Advanced style controls</span></li>
+            <li class="feature-item feature-disabled"><span class="feature-x">✗</span> <span>API access</span></li>
+          </ul>
+        </div>
+
+        <!-- Pro (Featured) -->
+        <div class="plan-card plan-card-featured">
+          <div class="plan-badge">Most Popular</div>
+          <div class="plan-header">
+            <div class="plan-icon plan-icon-pro">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+            </div>
+            <div>
+              <h2 class="plan-name">Pro</h2>
+              <p class="plan-desc">For creators who need more power</p>
+            </div>
+          </div>
+          <div class="plan-price">
+            <span class="price-amount" id="proPrice">$12</span>
+            <span class="price-period">/month</span>
+          </div>
+          <a href="/pages/register/index.html" class="btn btn-primary plan-btn">Start Pro Trial</a>
+          <ul class="plan-features">
+            <li class="feature-item"><span class="feature-check">✓</span> <span><strong>500 image generations/month</strong></span></li>
+            <li class="feature-item"><span class="feature-check">✓</span> <span>HD resolution (1024×1024)</span></li>
+            <li class="feature-item"><span class="feature-check">✓</span> <span>Advanced prompt handling</span></li>
+            <li class="feature-item"><span class="feature-check">✓</span> <span>Unlimited image history</span></li>
+            <li class="feature-item"><span class="feature-check">✓</span> <span>Download as PNG / JPG</span></li>
+            <li class="feature-item"><span class="feature-check">✓</span> <span><strong>Priority generation queue</strong></span></li>
+            <li class="feature-item"><span class="feature-check">✓</span> <span>Advanced style controls</span></li>
+            <li class="feature-item feature-disabled"><span class="feature-x">✗</span> <span>API access</span></li>
+          </ul>
+        </div>
+
+        <!-- Enterprise -->
+        <div class="plan-card">
+          <div class="plan-header">
+            <div class="plan-icon plan-icon-enterprise">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div>
+              <h2 class="plan-name">Enterprise</h2>
+              <p class="plan-desc">For teams and businesses</p>
+            </div>
+          </div>
+          <div class="plan-price">
+            <span class="price-amount" id="enterprisePrice">$49</span>
+            <span class="price-period">/month</span>
+          </div>
+          <a href="/pages/register/index.html" class="btn btn-outline plan-btn">Contact Sales</a>
+          <ul class="plan-features">
+            <li class="feature-item"><span class="feature-check">✓</span> <span><strong>Unlimited generations</strong></span></li>
+            <li class="feature-item"><span class="feature-check">✓</span> <span>4K resolution (2048×2048)</span></li>
+            <li class="feature-item"><span class="feature-check">✓</span> <span>Custom prompt fine-tuning</span></li>
+            <li class="feature-item"><span class="feature-check">✓</span> <span>Unlimited history & storage</span></li>
+            <li class="feature-item"><span class="feature-check">✓</span> <span>All export formats</span></li>
+            <li class="feature-item"><span class="feature-check">✓</span> <span>Instant priority generation</span></li>
+            <li class="feature-item"><span class="feature-check">✓</span> <span>Full style & model control</span></li>
+            <li class="feature-item"><span class="feature-check">✓</span> <span><strong>Full API access</strong></span></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- FAQ -->
+      <div class="faq-section">
+        <h2 class="faq-title">Frequently asked questions</h2>
+        <div class="faq-grid">
+          <div class="faq-item">
+            <h3>Can I cancel anytime?</h3>
+            <p>Yes, you can cancel your subscription at any time. Your plan remains active until the end of the billing period.</p>
+          </div>
+          <div class="faq-item">
+            <h3>What happens to my images if I downgrade?</h3>
+            <p>Your generated images remain accessible. If you exceed the free plan's history limit, older images may be removed after 30 days.</p>
+          </div>
+          <div class="faq-item">
+            <h3>Do unused generations roll over?</h3>
+            <p>No, unused generations reset at the start of each billing cycle. They do not carry over to the next month.</p>
+          </div>
+          <div class="faq-item">
+            <h3>Is there a free trial for Pro?</h3>
+            <p>Yes! New users get a 7-day free trial of the Pro plan. No credit card required to start.</p>
+          </div>
+          <div class="faq-item">
+            <h3>What payment methods do you accept?</h3>
+            <p>We accept all major credit cards, PayPal, and bank transfers for Enterprise plans.</p>
+          </div>
+          <div class="faq-item">
+            <h3>Do I own the images I generate?</h3>
+            <p>Yes. All images you generate are yours to use commercially or personally, subject to our Terms of Service.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="pricing-footer">
+    <div class="container">
+      <p>&copy; 2026 AI ImageGen. All rights reserved. · <a href="/index.html">Home</a> · <a href="/pages/login/index.html">Log In</a></p>
+    </div>
+  </footer>
+
+  <script type="module" src="/shared/store.js"></script>
+  <script type="module" src="/shared/navbar.js"></script>
+  <script type="module" src="script.js"></script>
+</body>
+</html>

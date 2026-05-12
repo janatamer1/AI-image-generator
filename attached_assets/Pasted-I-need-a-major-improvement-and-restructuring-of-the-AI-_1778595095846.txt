@@ -1,0 +1,91 @@
+I need a major improvement and restructuring of the AI Image Generator project. Please carefully apply the following updates and improvements across the entire website.
+
+1. Homepage Improvements
+
+* Some homepage images are not working correctly.
+* There is a specific image with a black background that does not appear properly. Please fix all broken or missing images.
+* Reduce the homepage gallery/images section to only 3 high-quality images instead of many images.
+* Improve the overall homepage design and make it feel more modern, professional, interactive, and realistic.
+* Improve spacing, animations, responsiveness, and overall UI/UX.
+* If you have better design ideas for the homepage, feel free to improve it creatively.
+
+2. Pricing / Offers Page
+   Create a dedicated pricing page that includes:
+
+* Free Plan
+* Premium Plan
+* Any additional plans if needed
+
+Each plan should clearly show:
+
+* Features
+* Limits
+* Benefits
+* Buttons for upgrading/subscribing
+
+Make the pricing section look modern and professional similar to real AI SaaS platforms.
+
+3. Main AI Generation Interface (Very Important)
+   I want the User Dashboard to be completely redesigned and replaced with a ChatGPT-style AI image generation interface.
+
+The new interface should include:
+
+* A left sidebar containing:
+
+  * Previous chats/history
+  * Previously generated images
+  * Chat titles/history
+* A main prompt area where the user types image requests
+* Generated images appearing in the conversation/chat area
+* A clean modern AI assistant layout similar to ChatGPT
+
+Example:
+If the user types:
+“Generate a realistic dog sitting in a park”
+the generated image should closely match the exact prompt and not generate unrelated content.
+
+The current generation results are inaccurate sometimes, so improve prompt handling and image generation accuracy as much as possible.
+
+4. Authentication & Roles
+   Currently, users can choose between Admin and User during signup.
+
+I DO NOT want this.
+
+Requirements:
+
+* Normal users should only be able to create regular user accounts.
+* Admin accounts should be protected and predefined manually.
+* Nobody should be able to sign up as an admin from the frontend.
+* If you have a better secure role-management idea, implement it.
+
+5. User Dashboard Improvements
+   Replace the current dashboard with the new AI chat/image generation workspace mentioned earlier.
+
+Also improve:
+
+* User profile section
+* Account settings
+* Generated image management
+* Chat history organization
+* Overall responsiveness and UI
+
+6. Admin Dashboard Improvements
+   Completely improve the Admin Dashboard:
+
+* Better UI/UX
+* Better statistics/cards
+* User management
+* Subscription/plan management
+* Generated image monitoring if possible
+* Better layout and navigation
+* More professional admin panel design
+
+7. General Improvements
+
+* Make the entire website feel like a real modern AI product.
+* Improve colors, gradients, effects, typography, animations, and responsiveness.
+* Keep the design premium, modern, and dynamic.
+* Ensure everything works properly on desktop and mobile.
+* Fix any broken UI sections or layout issues.
+
+Please organize the project structure properly and improve anything else you think would make the platform better and more realistic.

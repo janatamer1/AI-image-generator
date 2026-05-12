@@ -1,23 +1,22 @@
-/* ========================================
-   Login Page Logic
-   ======================================== */
-
-// Redirect if already logged in
 (function() {
   const user = getCurrentUser();
   if (user) {
-    if (user.role === 'admin') {
-      window.location.href = '/pages/admin-dashboard/index.html';
-    } else {
-      window.location.href = '/pages/user-dashboard/index.html';
-    }
+    window.location.href = user.role === 'admin' ? '/pages/admin-dashboard/index.html' : '/pages/user-dashboard/index.html';
   }
 })();
+
+function togglePwd(id, btn) {
+  const input = document.getElementById(id);
+  input.type = input.type === 'password' ? 'text' : 'password';
+  btn.style.opacity = input.type === 'text' ? '1' : '0.5';
+}
 
 function handleLogin() {
   const email = document.getElementById('loginEmail').value.trim();
   const password = document.getElementById('loginPassword').value;
   const errorEl = document.getElementById('loginError');
+
+  errorEl.style.display = 'none';
 
   if (!email || !password) {
     errorEl.textContent = 'Please enter your email and password.';
@@ -44,15 +43,5 @@ function handleLogin() {
   }
 }
 
-function togglePasswordVisibility() {
-  const passwordInput = document.getElementById('loginPassword');
-  const toggleCheckbox = document.getElementById('togglePassword');
-  if (toggleCheckbox.checked) {
-    passwordInput.type = 'text';
-  } else {
-    passwordInput.type = 'password';
-  }
-}
-
 window.handleLogin = handleLogin;
-window.togglePasswordVisibility = togglePasswordVisibility;
+window.togglePwd = togglePwd;

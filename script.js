@@ -19,12 +19,20 @@ function updateNavbarAuth() {
 initNavbar();
 updateNavbarAuth();
 
+function fillPrompt(text) {
+  const input = document.getElementById('promptInput');
+  if (input) {
+    input.value = text;
+    input.focus();
+  }
+}
+
 function generateImage() {
   const promptInput = document.getElementById('promptInput');
   const promptText = promptInput.value.trim();
 
   if (!promptText) {
-    alert("Please enter a description to generate an image.");
+    promptInput.focus();
     return;
   }
 
@@ -37,17 +45,18 @@ function generateImage() {
   const generateBtn = document.getElementById('generateBtn');
 
   generateBtn.disabled = true;
+  generateBtn.innerHTML = `<div class="btn-spinner"></div> Generating...`;
 
   generatorOutput.classList.add('active');
   outputImage.style.display = 'none';
   outputActions.style.display = 'none';
   loadingState.style.display = 'flex';
 
-  let timeLeft = 15;
+  let timeLeft = 12;
   loadingTimer.textContent = timeLeft;
 
   const timerInterval = setInterval(() => {
-    timeLeft--;
+    timeLeft = Math.max(0, timeLeft - 1);
     loadingTimer.textContent = timeLeft;
   }, 1000);
 
@@ -55,23 +64,18 @@ function generateImage() {
     clearInterval(timerInterval);
     loadingState.style.display = 'none';
 
-    const randomImages = [
-      "https://images.pexels.com/photos/2881232/pexels-photo-2881232.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/3573383/pexels-photo-3573383.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/1762973/pexels-photo-1762973.jpeg?auto=compress&cs=tinysrgb&w=800"
-    ];
-    const selectedImage = randomImages[Math.floor(Math.random() * randomImages.length)];
+    const selectedImage = getImageForPrompt(promptText);
 
     outputImage.src = selectedImage;
     outputImage.style.display = 'block';
-
     outputPromptText.textContent = `"${promptText}"`;
     outputActions.style.display = 'flex';
 
     generateBtn.disabled = false;
+    generateBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg> Generate`;
 
-    generatorOutput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }, 15000);
+    generatorOutput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 12000);
 }
 
 function downloadImage() {
@@ -80,10 +84,21 @@ function downloadImage() {
   const a = document.createElement('a');
   a.href = outputImage.src;
   a.download = 'AI_Generated_Image.jpg';
+  a.target = '_blank';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('promptInput');
+  if (input) {
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') generateImage();
+    });
+  }
+});
+
 window.generateImage = generateImage;
 window.downloadImage = downloadImage;
+window.fillPrompt = fillPrompt;

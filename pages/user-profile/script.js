@@ -1,18 +1,26 @@
-/* ========================================
-   User Profile Page Logic
-   ======================================== */
-
 const user = requireAuth('user');
 if (user) initProfilePage(user);
 
 function initProfilePage(user) {
   initNavbar();
   document.getElementById('userBadge').textContent = user.name;
-  document.getElementById('profileAvatar').textContent = user.name.charAt(0).toUpperCase();
+  document.getElementById('profileAvatarLg').textContent = user.name.charAt(0).toUpperCase();
+  document.getElementById('profileNameDisplay').textContent = user.name;
+  document.getElementById('profileEmailDisplay').textContent = user.email;
   document.getElementById('profileName').value = user.name;
   document.getElementById('profileEmail').value = user.email;
-  document.getElementById('profileRole').value = user.role === 'admin' ? 'Administrator' : 'User';
-  document.getElementById('profileDate').value = user.joinedAt;
+  document.getElementById('profileRole').value = user.role === 'admin' ? 'Administrator' : 'Standard User';
+  document.getElementById('profileDate').value = user.joinedAt || '—';
+  const plan = user.plan || 'free';
+  document.getElementById('profilePlanBadge').textContent = plan.charAt(0).toUpperCase() + plan.slice(1) + ' Plan';
+  document.getElementById('profileTotalImages').textContent = (user.images || []).length;
+  document.getElementById('profileTotalChats').textContent = (user.chats || []).length;
+
+  if (user.joinedAt) {
+    const joined = new Date(user.joinedAt);
+    const days = Math.floor((new Date() - joined) / (1000 * 60 * 60 * 24));
+    document.getElementById('profileMemberDays').textContent = days;
+  }
 }
 
 function saveProfile() {
@@ -45,10 +53,13 @@ function saveProfile() {
   user.email = email;
   saveStore(store);
 
-  document.getElementById('profileAvatar').textContent = name.charAt(0).toUpperCase();
+  document.getElementById('profileAvatarLg').textContent = name.charAt(0).toUpperCase();
+  document.getElementById('profileNameDisplay').textContent = name;
+  document.getElementById('profileEmailDisplay').textContent = email;
   document.getElementById('userBadge').textContent = name;
 
   successEl.style.display = 'block';
+  setTimeout(() => { successEl.style.display = 'none'; }, 3000);
 }
 
 function changePassword() {
@@ -104,6 +115,7 @@ function changePassword() {
   document.getElementById('confirmPassword').value = '';
 
   successEl.style.display = 'block';
+  setTimeout(() => { successEl.style.display = 'none'; }, 3000);
 }
 
 window.saveProfile = saveProfile;

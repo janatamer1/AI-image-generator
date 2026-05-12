@@ -1,7 +1,3 @@
-/* ========================================
-   Shared Data Store - localStorage-based
-   ======================================== */
-
 const STORAGE_KEY = 'aiimagegen_data';
 const SESSION_KEY = 'aiimagegen_session';
 
@@ -13,23 +9,28 @@ function getStore() {
   } else {
     store = {
       users: [
-        { id: 'admin1', name: 'Admin', email: 'admin@imagegen.com', password: 'admin123', role: 'admin', joinedAt: '2026-02-20', images: [] }
+        {
+          id: 'admin1',
+          name: 'Admin',
+          email: 'admin@imagegen.com',
+          password: 'admin123',
+          role: 'admin',
+          plan: 'enterprise',
+          joinedAt: '2026-02-20',
+          images: [],
+          chats: []
+        }
       ]
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
   }
-  
-  // Always get the logged in user from session storage
   store.currentUser = sessionStorage.getItem(SESSION_KEY);
   return store;
 }
 
 function saveStore(store) {
-  // Save users permanently
   const toPersist = { users: store.users };
   localStorage.setItem(STORAGE_KEY, JSON.stringify(toPersist));
-  
-  // Save the logged-in session only temporarily
   if (store.currentUser) {
     sessionStorage.setItem(SESSION_KEY, store.currentUser);
   } else {

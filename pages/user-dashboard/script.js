@@ -1,127 +1,252 @@
-/* ========================================
-   User Dashboard Logic
-   ======================================== */
-
 const user = requireAuth('user');
-if (user) initDashboard(user);
+if (user) initStudio(user);
 
-function initDashboard(user) {
-  initNavbar();
-  document.getElementById('userDisplayName').textContent = user.name;
-  document.getElementById('userBadge').textContent = user.name;
-  document.getElementById('userTotalImages').textContent = user.images.length;
-  renderRecentImages(user);
+let currentChatId = null;
+
+function initStudio(user) {
+  document.getElementById('sidebarUserName').textContent = user.name;
+  document.getElementById('sidebarAvatar').textContent = user.name.charAt(0).toUpperCase();
+  const plan = user.plan || 'free';
+  document.getElementById('sidebarUserPlan').textContent = plan.charAt(0).toUpperCase() + plan.slice(1) + ' Plan';
+  renderChatHistory(user);
 }
 
-function renderRecentImages(user) {
-  const grid = document.getElementById('userRecentGrid');
-  if (!grid) return;
-
-  if (user.images.length === 0) {
-    grid.innerHTML = `
-      <div class="empty-state">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--text-muted);opacity:0.4;">
-          <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>
-        </svg>
-        <p>No images generated yet. Try creating one above!</p>
-      </div>`;
+function renderChatHistory(user) {
+  const list = document.getElementById('chatHistoryList');
+  const chats = (user.chats || []).slice().reverse();
+  if (chats.length === 0) {
+    list.innerHTML = '<p class="sidebar-empty">No chats yet</p>';
     return;
   }
-
-  const recent = user.images.slice(0, 6);
-  grid.innerHTML = recent.map(img => `
-    <div class="recent-card">
-      <img src="${img.url}" alt="${img.prompt}" loading="lazy">
-      <div class="recent-card-info">
-        <p>${img.prompt}</p>
-        <span>${img.createdAt}</span>
-      </div>
-    </div>
+  list.innerHTML = chats.map(chat => `
+    <button class="chat-history-item ${chat.id === currentChatId ? 'active' : ''}" onclick="loadChat('${chat.id}')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span>${chat.title || 'New Chat'}</span>
+    </button>
   `).join('');
 }
 
-function dashGenerateImage() {
-  const promptInput = document.getElementById('dashPromptInput');
-  const promptText = promptInput.value.trim();
+function startNewChat() {
+  currentChatId = null;
+  document.getElementById('welcomeScreen').style.display = 'flex';
+  document.getElementById('chatArea').style.display = 'none';
+  document.getElementById('chatMessages').innerHTML = '';
+  document.getElementById('studioPrompt').value = '';
 
-  if (!promptText) {
-    alert("Please enter a description to generate an image.");
-    return;
-  }
-
-  const dashOutput = document.getElementById('dashOutput');
-  const dashLoading = document.getElementById('dashLoading');
-  const dashOutputImage = document.getElementById('dashOutputImage');
-  const dashOutputActions = document.getElementById('dashOutputActions');
-  const dashOutputPrompt = document.getElementById('dashOutputPrompt');
-  const dashTimer = document.getElementById('dashTimer');
-  const dashGenerateBtn = document.getElementById('dashGenerateBtn');
-
-  dashGenerateBtn.disabled = true;
-
-  dashOutput.style.display = 'block';
-  dashOutputImage.style.display = 'none';
-  dashOutputActions.style.display = 'none';
-  dashLoading.style.display = 'flex';
-
-  let timeLeft = 15;
-  dashTimer.textContent = timeLeft;
-
-  const timerInterval = setInterval(() => {
-    timeLeft--;
-    dashTimer.textContent = timeLeft;
-  }, 1000);
-
-  setTimeout(() => {
-    clearInterval(timerInterval);
-    dashLoading.style.display = 'none';
-
-    const randomImages = [
-      "https://images.pexels.com/photos/2881232/pexels-photo-2881232.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/3573383/pexels-photo-3573383.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/1762973/pexels-photo-1762973.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/2732042/pexels-photo-2732042.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?auto=compress&cs=tinysrgb&w=800"
-    ];
-    const selectedImage = randomImages[Math.floor(Math.random() * randomImages.length)];
-
-    dashOutputImage.src = selectedImage;
-    dashOutputImage.style.display = 'block';
-
-    dashOutputPrompt.textContent = `"${promptText}"`;
-    dashOutputActions.style.display = 'flex';
-
-    dashGenerateBtn.disabled = false;
-
-    // Save to user's images
-    const store = getStore();
-    const currentUser = store.users.find(u => u.id === store.currentUser);
-    if (currentUser) {
-      currentUser.images.unshift({
-        id: 'img_' + Date.now(),
-        prompt: promptText,
-        url: selectedImage,
-        createdAt: new Date().toISOString().split('T')[0]
-      });
-      saveStore(store);
-      document.getElementById('userTotalImages').textContent = currentUser.images.length;
-      renderRecentImages(currentUser);
-    }
-
-    promptInput.value = '';
-  }, 15000);
+  const store = getStore();
+  const u = store.users.find(u => u.id === store.currentUser);
+  renderChatHistory(u);
 }
 
-function dashDownloadImage() {
-  const img = document.getElementById('dashOutputImage');
-  if (!img.src) return;
+function loadChat(chatId) {
+  const store = getStore();
+  const u = store.users.find(u => u.id === store.currentUser);
+  const chat = (u.chats || []).find(c => c.id === chatId);
+  if (!chat) return;
+
+  currentChatId = chatId;
+  document.getElementById('welcomeScreen').style.display = 'none';
+  document.getElementById('chatArea').style.display = 'flex';
+  document.getElementById('chatMessages').innerHTML = '';
+
+  (chat.messages || []).forEach(msg => {
+    if (msg.type === 'user') appendUserMessage(msg.text, false);
+    else if (msg.type === 'image') appendImageMessage(msg.imageUrl, msg.prompt, false);
+  });
+
+  scrollToBottom();
+  renderChatHistory(u);
+}
+
+function fillStudioPrompt(text) {
+  document.getElementById('studioPrompt').value = text;
+  document.getElementById('studioPrompt').focus();
+}
+
+function handleStudioKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendStudioMessage();
+  }
+}
+
+function autoResizeTextarea(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 160) + 'px';
+}
+
+function sendStudioMessage() {
+  const textarea = document.getElementById('studioPrompt');
+  const prompt = textarea.value.trim();
+  if (!prompt) return;
+
+  textarea.value = '';
+  textarea.style.height = 'auto';
+
+  document.getElementById('welcomeScreen').style.display = 'none';
+  document.getElementById('chatArea').style.display = 'flex';
+
+  const sendBtn = document.getElementById('studioSendBtn');
+  sendBtn.disabled = true;
+  sendBtn.classList.add('loading');
+
+  appendUserMessage(prompt, true);
+
+  const loadingId = appendLoadingMessage();
+
+  setTimeout(() => {
+    const imageUrl = getImageForPrompt(prompt);
+    removeLoadingMessage(loadingId);
+    appendImageMessage(imageUrl, prompt, true);
+    sendBtn.disabled = false;
+    sendBtn.classList.remove('loading');
+    saveMessage(prompt, imageUrl);
+    scrollToBottom();
+  }, 12000);
+}
+
+function appendUserMessage(text, animate) {
+  const messages = document.getElementById('chatMessages');
+  const el = document.createElement('div');
+  el.className = 'chat-message user-message' + (animate ? ' animate-in' : '');
+  el.innerHTML = `
+    <div class="user-bubble">
+      <p>${escapeHtml(text)}</p>
+    </div>
+  `;
+  messages.appendChild(el);
+  if (animate) scrollToBottom();
+}
+
+function appendLoadingMessage() {
+  const messages = document.getElementById('chatMessages');
+  const id = 'loading_' + Date.now();
+  const el = document.createElement('div');
+  el.className = 'chat-message ai-message';
+  el.id = id;
+
+  let timeLeft = 12;
+  el.innerHTML = `
+    <div class="ai-avatar">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+    </div>
+    <div class="ai-bubble">
+      <div class="generating-indicator">
+        <div class="gen-spinner"></div>
+        <div class="gen-text">
+          <span>Generating your image...</span>
+          <span class="gen-timer" id="genTimer_${id}">12s</span>
+        </div>
+      </div>
+    </div>
+  `;
+  messages.appendChild(el);
+
+  const timerInterval = setInterval(() => {
+    timeLeft = Math.max(0, timeLeft - 1);
+    const timerEl = document.getElementById('genTimer_' + id);
+    if (timerEl) timerEl.textContent = timeLeft + 's';
+    else clearInterval(timerInterval);
+  }, 1000);
+  el._timerInterval = timerInterval;
+
+  scrollToBottom();
+  return id;
+}
+
+function removeLoadingMessage(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    if (el._timerInterval) clearInterval(el._timerInterval);
+    el.remove();
+  }
+}
+
+function appendImageMessage(imageUrl, prompt, animate) {
+  const messages = document.getElementById('chatMessages');
+  const el = document.createElement('div');
+  el.className = 'chat-message ai-message' + (animate ? ' animate-in' : '');
+  el.innerHTML = `
+    <div class="ai-avatar">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+    </div>
+    <div class="ai-bubble">
+      <div class="generated-image-card">
+        <img src="${imageUrl}" alt="${escapeHtml(prompt)}" class="generated-image" loading="lazy">
+        <div class="generated-image-actions">
+          <span class="gen-prompt-label">"${escapeHtml(prompt)}"</span>
+          <div class="gen-action-btns">
+            <button class="btn btn-ghost btn-xs" onclick="downloadGenerated('${imageUrl}', '${escapeHtml(prompt)}')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  messages.appendChild(el);
+}
+
+function downloadGenerated(url, prompt) {
   const a = document.createElement('a');
-  a.href = img.src;
-  a.download = 'AI_Generated_Image.jpg';
+  a.href = url;
+  a.download = 'AI_Image.jpg';
+  a.target = '_blank';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
 }
 
-window.dashGenerateImage = dashGenerateImage;
-window.dashDownloadImage = dashDownloadImage;
+function saveMessage(prompt, imageUrl) {
+  const store = getStore();
+  const u = store.users.find(u => u.id === store.currentUser);
+  if (!u) return;
+  if (!u.chats) u.chats = [];
+  if (!u.images) u.images = [];
+
+  const now = new Date().toISOString().split('T')[0];
+
+  if (!currentChatId) {
+    currentChatId = 'chat_' + Date.now();
+    const newChat = {
+      id: currentChatId,
+      title: prompt.length > 40 ? prompt.substring(0, 40) + '…' : prompt,
+      createdAt: now,
+      messages: []
+    };
+    u.chats.push(newChat);
+  }
+
+  const chat = u.chats.find(c => c.id === currentChatId);
+  if (chat) {
+    chat.messages.push({ type: 'user', text: prompt });
+    chat.messages.push({ type: 'image', imageUrl, prompt });
+  }
+
+  u.images.unshift({ id: 'img_' + Date.now(), prompt, url: imageUrl, createdAt: now });
+  saveStore(store);
+  renderChatHistory(u);
+}
+
+function scrollToBottom() {
+  const chatMessages = document.getElementById('chatMessages');
+  if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+function escapeHtml(text) {
+  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+window.startNewChat = startNewChat;
+window.loadChat = loadChat;
+window.fillStudioPrompt = fillStudioPrompt;
+window.handleStudioKey = handleStudioKey;
+window.autoResizeTextarea = autoResizeTextarea;
+window.sendStudioMessage = sendStudioMessage;
+window.downloadGenerated = downloadGenerated;
+window.toggleSidebar = toggleSidebar;

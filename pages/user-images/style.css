@@ -1,6 +1,58 @@
-/* ========================================
-   User Images Page Styles
-   ======================================== */
+.images-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+  max-width: 400px;
+}
+
+.img-stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.img-stat-value {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.img-stat-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.images-toolbar {
+  margin-bottom: 20px;
+}
+
+.search-bar-inline {
+  position: relative;
+  max-width: 400px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.search-input { padding-left: 42px !important; }
 
 .history-grid {
   display: grid;
@@ -14,18 +66,43 @@
   border: 1px solid var(--border-light);
   background: var(--bg-secondary);
   transition: var(--transition);
+  cursor: pointer;
 }
 
 .history-card:hover {
-  border-color: var(--border-hover);
-  transform: translateY(-2px);
+  border-color: rgba(147, 51, 234, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
 }
 
-.history-card img {
-  width: 100%;
+.history-card-img-wrap {
+  position: relative;
   aspect-ratio: 1;
-  object-fit: cover;
+  overflow: hidden;
 }
+
+.history-card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.history-card:hover .history-card-img-wrap img { transform: scale(1.05); }
+
+.history-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: var(--transition);
+}
+
+.history-card:hover .history-card-overlay { opacity: 1; }
 
 .history-card-info { padding: 12px; }
 
@@ -35,13 +112,90 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  margin-bottom: 4px;
 }
 
 .history-card-info span {
   font-size: 0.7rem;
-  color: #64748b;
+  color: #475569;
+}
+
+/* Image Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: var(--transition);
+  padding: 24px;
+}
+
+.modal-overlay.active { opacity: 1; pointer-events: all; }
+
+.image-modal-content {
+  position: relative;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  max-width: 800px;
+  width: 100%;
+  transform: scale(0.95);
+  transition: var(--transition);
+}
+
+.modal-overlay.active .image-modal-content { transform: scale(1); }
+
+.modal-close {
+  position: absolute;
+  top: 12px; right: 12px;
+  background: rgba(0,0,0,0.5);
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  z-index: 10;
+}
+
+.modal-close:hover { background: rgba(0,0,0,0.8); }
+
+.modal-full-img {
+  width: 100%;
+  max-height: 65vh;
+  object-fit: contain;
+  display: block;
+  background: #000;
+}
+
+.modal-img-info {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid var(--border-light);
+}
+
+.modal-img-info p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-style: italic;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 @media (max-width: 480px) {
   .history-grid { grid-template-columns: 1fr 1fr; }
+  .images-stats { max-width: 100%; }
 }

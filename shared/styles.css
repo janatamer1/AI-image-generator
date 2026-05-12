@@ -498,3 +498,24 @@ ul { list-style: none; }
 @media (max-width: 480px) {
   .stats-row { grid-template-columns: 1fr; }
 }
+
+/* Section eyebrow label */
+.section-eyebrow {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent-purple);
+  margin-bottom: 12px;
+}
+
+/* Dashboard header flex layout */
+.dashboard-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}

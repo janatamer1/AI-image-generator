@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,13 +8,12 @@
   <link rel="stylesheet" href="/shared/styles.css">
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
   <nav class="navbar scrolled" id="navbar">
     <div class="container navbar-container">
       <a href="/index.html" class="logo-text">AI <span class="gradient-text">ImageGen</span></a>
       <ul class="navbar-links">
-        <li><a href="/pages/user-dashboard/index.html" class="nav-link">Dashboard</a></li>
+        <li><a href="/pages/user-dashboard/index.html" class="nav-link">Studio</a></li>
         <li><a href="/pages/user-images/index.html" class="nav-link">My Images</a></li>
         <li><a href="/pages/user-profile/index.html" class="nav-link active">Profile</a></li>
       </ul>
@@ -31,55 +29,84 @@
       <div class="dashboard-header">
         <div>
           <h1 class="dashboard-title">My Profile</h1>
-          <p class="dashboard-subtitle">Manage your account information and security.</p>
+          <p class="dashboard-subtitle">Manage your account information and security settings.</p>
         </div>
       </div>
 
-      <!-- Profile Info Card -->
-      <div class="dashboard-card profile-card">
-        <div class="profile-avatar" id="profileAvatar">U</div>
-        <div class="profile-info">
-          <div class="form-group">
-            <label class="form-label">Full Name</label>
-            <input type="text" class="form-input" id="profileName">
+      <div class="profile-layout">
+        <!-- Left: Avatar & Stats -->
+        <div class="profile-sidebar-card">
+          <div class="profile-avatar-wrap">
+            <div class="profile-avatar-lg" id="profileAvatarLg">U</div>
+            <div class="profile-avatar-info">
+              <h2 class="profile-name-display" id="profileNameDisplay">User</h2>
+              <p class="profile-email-display" id="profileEmailDisplay">user@example.com</p>
+              <span class="profile-plan-badge" id="profilePlanBadge">Free Plan</span>
+            </div>
           </div>
-          <div class="form-group">
-            <label class="form-label">Email</label>
-            <input type="email" class="form-input" id="profileEmail">
+          <div class="profile-mini-stats">
+            <div class="profile-mini-stat">
+              <span class="profile-mini-value" id="profileTotalImages">0</span>
+              <span class="profile-mini-label">Images</span>
+            </div>
+            <div class="profile-mini-stat">
+              <span class="profile-mini-value" id="profileTotalChats">0</span>
+              <span class="profile-mini-label">Chats</span>
+            </div>
+            <div class="profile-mini-stat">
+              <span class="profile-mini-value" id="profileMemberDays">0</span>
+              <span class="profile-mini-label">Days Active</span>
+            </div>
           </div>
-          <div class="form-group">
-            <label class="form-label">Role</label>
-            <input type="text" class="form-input" id="profileRole" readonly>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Member Since</label>
-            <input type="text" class="form-input" id="profileDate" readonly>
-          </div>
-          <div class="form-success" id="profileSuccess" style="display:none;">Profile updated successfully.</div>
-          <div class="form-error" id="profileError" style="display:none;"></div>
-          <button class="btn btn-primary" onclick="saveProfile()">Save Changes</button>
+          <a href="/pages/pricing/index.html" class="btn btn-primary" style="width:100%;justify-content:center;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+            Upgrade Plan
+          </a>
         </div>
-      </div>
 
-      <!-- Change Password Card -->
-      <div class="dashboard-card profile-card">
-        <h2 class="card-title">Change Password</h2>
-        <div class="profile-info">
-          <div class="form-group">
-            <label class="form-label">Current Password</label>
-            <input type="password" class="form-input" id="currentPassword" placeholder="Enter your current password">
+        <!-- Right: Edit Forms -->
+        <div class="profile-forms">
+          <div class="dashboard-card">
+            <h2 class="card-title">Account Information</h2>
+            <div class="form-group">
+              <label class="form-label">Full Name</label>
+              <input type="text" class="form-input" id="profileName">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input type="email" class="form-input" id="profileEmail">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Account Type</label>
+              <input type="text" class="form-input" id="profileRole" readonly style="opacity:0.6;cursor:not-allowed;">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Member Since</label>
+              <input type="text" class="form-input" id="profileDate" readonly style="opacity:0.6;cursor:not-allowed;">
+            </div>
+            <div class="form-success" id="profileSuccess" style="display:none;">Profile updated successfully!</div>
+            <div class="form-error" id="profileError" style="display:none;"></div>
+            <button class="btn btn-primary" onclick="saveProfile()">Save Changes</button>
           </div>
-          <div class="form-group">
-            <label class="form-label">New Password</label>
-            <input type="password" class="form-input" id="newPassword" placeholder="At least 6 characters">
+
+          <div class="dashboard-card">
+            <h2 class="card-title">Change Password</h2>
+            <div class="form-group">
+              <label class="form-label">Current Password</label>
+              <input type="password" class="form-input" id="currentPassword" placeholder="Enter your current password">
+            </div>
+            <div class="form-group">
+              <label class="form-label">New Password</label>
+              <input type="password" class="form-input" id="newPassword" placeholder="At least 6 characters">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Confirm New Password</label>
+              <input type="password" class="form-input" id="confirmPassword" placeholder="Re-enter new password">
+            </div>
+            <div class="form-success" id="passwordSuccess" style="display:none;">Password changed successfully!</div>
+            <div class="form-error" id="passwordError" style="display:none;"></div>
+            <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
           </div>
-          <div class="form-group">
-            <label class="form-label">Confirm New Password</label>
-            <input type="password" class="form-input" id="confirmPassword" placeholder="Re-enter new password">
-          </div>
-          <div class="form-success" id="passwordSuccess" style="display:none;">Password changed successfully.</div>
-          <div class="form-error" id="passwordError" style="display:none;"></div>
-          <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
         </div>
       </div>
     </div>
@@ -89,5 +116,4 @@
   <script type="module" src="/shared/navbar.js"></script>
   <script type="module" src="script.js"></script>
 </body>
-
 </html>
