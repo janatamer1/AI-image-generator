@@ -292,6 +292,145 @@ function escapeHtml(text) {
   return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
+/* ── Change Password Modal ── */
+
+function openChangePassword() {
+  const overlay = document.getElementById('cpwOverlay');
+  overlay.classList.add('open');
+  document.getElementById('cpwCurrent').focus();
+  resetCpwForm();
+}
+
+function closeChangePassword() {
+  document.getElementById('cpwOverlay').classList.remove('open');
+  resetCpwForm();
+}
+
+function closeCpwOnBackdrop(e) {
+  if (e.target === document.getElementById('cpwOverlay')) closeChangePassword();
+}
+
+function resetCpwForm() {
+  ['cpwCurrent','cpwNew','cpwConfirm'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('cpwError').style.display = 'none';
+  document.getElementById('cpwSuccess').style.display = 'none';
+  document.getElementById('cpwStrength').style.display = 'none';
+  const hint = document.getElementById('cpwMatchHint');
+  hint.style.display = 'none';
+  hint.textContent = '';
+}
+
+function toggleCpwEye(inputId, btn) {
+  const input = document.getElementById(inputId);
+  const show = btn.querySelector('.eye-show');
+  const hide = btn.querySelector('.eye-hide');
+  if (input.type === 'password') {
+    input.type = 'text';
+    show.style.display = 'none';
+    hide.style.display = '';
+  } else {
+    input.type = 'password';
+    show.style.display = '';
+    hide.style.display = 'none';
+  }
+}
+
+function cpwUpdateStrength(val) {
+  const wrap = document.getElementById('cpwStrength');
+  const label = document.getElementById('cpwStrengthLabel');
+  if (!val) { wrap.style.display = 'none'; return; }
+  wrap.style.display = 'flex';
+
+  let score = 0;
+  if (val.length >= 6) score++;
+  if (val.length >= 10) score++;
+  if (/[A-Z]/.test(val) && /[a-z]/.test(val)) score++;
+  if (/[0-9]/.test(val) && /[^A-Za-z0-9]/.test(val)) score++;
+
+  const colors = ['#ef4444','#f97316','#eab308','#22c55e'];
+  const labels = ['Weak','Fair','Good','Strong'];
+  ['cpwBar1','cpwBar2','cpwBar3','cpwBar4'].forEach((id, i) => {
+    document.getElementById(id).style.background = i < score ? colors[score - 1] : 'rgba(255,255,255,0.06)';
+  });
+  label.textContent = labels[score - 1] || 'Weak';
+  label.style.color = colors[score - 1] || colors[0];
+}
+
+function cpwCheckMatch() {
+  const newVal = document.getElementById('cpwNew').value;
+  const confirmVal = document.getElementById('cpwConfirm').value;
+  const hint = document.getElementById('cpwMatchHint');
+  if (!confirmVal) { hint.style.display = 'none'; return; }
+  hint.style.display = 'block';
+  if (newVal === confirmVal) {
+    hint.textContent = '✓ Passwords match';
+    hint.className = 'cpw-match-hint ok';
+  } else {
+    hint.textContent = '✗ Passwords do not match';
+    hint.className = 'cpw-match-hint fail';
+  }
+}
+
+function submitChangePassword() {
+  const current = document.getElementById('cpwCurrent').value;
+  const newPwd = document.getElementById('cpwNew').value;
+  const confirm = document.getElementById('cpwConfirm').value;
+  const errorEl = document.getElementById('cpwError');
+  const successEl = document.getElementById('cpwSuccess');
+
+  errorEl.style.display = 'none';
+  successEl.style.display = 'none';
+
+  if (!current || !newPwd || !confirm) {
+    errorEl.textContent = 'Please fill in all three fields.';
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  const user = getCurrentUser();
+  if (!user) return;
+
+  if (current !== user.password) {
+    errorEl.textContent = 'Current password is incorrect.';
+    errorEl.style.display = 'block';
+    return;
+  }
+  if (newPwd.length < 6) {
+    errorEl.textContent = 'New password must be at least 6 characters.';
+    errorEl.style.display = 'block';
+    return;
+  }
+  if (newPwd === current) {
+    errorEl.textContent = 'New password must be different from your current one.';
+    errorEl.style.display = 'block';
+    return;
+  }
+  if (newPwd !== confirm) {
+    errorEl.textContent = 'New passwords do not match.';
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  const store = getStore();
+  const storeUser = store.users.find(u => u.id === user.id);
+  storeUser.password = newPwd;
+  saveStore(store);
+
+  successEl.style.display = 'flex';
+  ['cpwCurrent','cpwNew','cpwConfirm'].forEach(id => { document.getElementById(id).value = ''; });
+  cpwUpdateStrength('');
+  document.getElementById('cpwMatchHint').style.display = 'none';
+
+  setTimeout(() => closeChangePassword(), 2000);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeChangePassword();
+});
+
 window.startNewChat = startNewChat;
 window.loadChat = loadChat;
 window.fillStudioPrompt = fillStudioPrompt;
@@ -300,3 +439,10 @@ window.autoResizeTextarea = autoResizeTextarea;
 window.sendStudioMessage = sendStudioMessage;
 window.downloadGenerated = downloadGenerated;
 window.toggleSidebar = toggleSidebar;
+window.openChangePassword = openChangePassword;
+window.closeChangePassword = closeChangePassword;
+window.closeCpwOnBackdrop = closeCpwOnBackdrop;
+window.toggleCpwEye = toggleCpwEye;
+window.cpwUpdateStrength = cpwUpdateStrength;
+window.cpwCheckMatch = cpwCheckMatch;
+window.submitChangePassword = submitChangePassword;
