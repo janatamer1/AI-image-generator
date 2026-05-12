@@ -44,4 +44,15 @@ function handleLogin() {
   }
 }
 
+function togglePasswordVisibility() {
+  const passwordInput = document.getElementById('loginPassword');
+  const toggleCheckbox = document.getElementById('togglePassword');
+  if (toggleCheckbox.checked) {
+    passwordInput.type = 'text';
+  } else {
+    passwordInput.type = 'password';
+  }
+}
+
 window.handleLogin = handleLogin;
+window.togglePasswordVisibility = togglePasswordVisibility;
