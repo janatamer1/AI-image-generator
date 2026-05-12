@@ -3,22 +3,38 @@
    ======================================== */
 
 const STORAGE_KEY = 'aiimagegen_data';
+const SESSION_KEY = 'aiimagegen_session';
 
 function getStore() {
   const raw = localStorage.getItem(STORAGE_KEY);
-  if (raw) return JSON.parse(raw);
-  const initial = {
-    users: [
-      { id: 'admin1', name: 'Admin', email: 'admin@imagegen.com', password: 'admin123', role: 'admin', joinedAt: '2026-02-20', images: [] }
-    ],
-    currentUser: null
-  };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(initial));
-  return initial;
+  let store;
+  if (raw) {
+    store = JSON.parse(raw);
+  } else {
+    store = {
+      users: [
+        { id: 'admin1', name: 'Admin', email: 'admin@imagegen.com', password: 'admin123', role: 'admin', joinedAt: '2026-02-20', images: [] }
+      ]
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+  }
+  
+  // Always get the logged in user from session storage
+  store.currentUser = sessionStorage.getItem(SESSION_KEY);
+  return store;
 }
 
 function saveStore(store) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+  // Save users permanently
+  const toPersist = { users: store.users };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(toPersist));
+  
+  // Save the logged-in session only temporarily
+  if (store.currentUser) {
+    sessionStorage.setItem(SESSION_KEY, store.currentUser);
+  } else {
+    sessionStorage.removeItem(SESSION_KEY);
+  }
 }
 
 function getCurrentUser() {
