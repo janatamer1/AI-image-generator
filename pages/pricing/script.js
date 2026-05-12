@@ -45,6 +45,12 @@ function toggleBilling() {
     if (proOriginal) proOriginal.style.display = 'none';
     if (enterpriseOriginal) enterpriseOriginal.style.display = 'none';
   }
+
+  const billingParam = isYearly ? 'yearly' : 'monthly';
+  const proBtn = document.getElementById('proPlanBtn');
+  const entBtn = document.getElementById('enterprisePlanBtn');
+  if (proBtn) proBtn.href = `/pages/checkout/index.html?plan=pro&billing=${billingParam}`;
+  if (entBtn) entBtn.href = `/pages/checkout/index.html?plan=enterprise&billing=${billingParam}`;
 }
 
 window.toggleBilling = toggleBilling;

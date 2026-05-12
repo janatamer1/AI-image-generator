@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout - AI ImageGen</title>
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <link rel="stylesheet" href="/shared/styles.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar scrolled">
+    <div class="container navbar-container">
+      <a href="/index.html" class="logo-text">AI <span class="gradient-text">ImageGen</span></a>
+      <div style="display:flex;align-items:center;gap:8px;font-size:0.82rem;color:var(--text-muted);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Secure Checkout
+      </div>
+    </div>
+  </nav>
+
+  <main class="checkout-main">
+    <div class="checkout-container">
+
+      <!-- Left: Payment Form -->
+      <div class="checkout-form-col">
+        <a href="/pages/pricing/index.html" class="back-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+          Back to pricing
+        </a>
+
+        <h1 class="checkout-title">Complete your order</h1>
+        <p class="checkout-subtitle">You're one step away from unlocking full access.</p>
+
+        <!-- Step indicator -->
+        <div class="checkout-steps">
+          <div class="step active" id="step1Indicator">
+            <span class="step-num">1</span>
+            <span class="step-label">Account</span>
+          </div>
+          <div class="step-line"></div>
+          <div class="step" id="step2Indicator">
+            <span class="step-num">2</span>
+            <span class="step-label">Payment</span>
+          </div>
+          <div class="step-line"></div>
+          <div class="step" id="step3Indicator">
+            <span class="step-num">3</span>
+            <span class="step-label">Confirm</span>
+          </div>
+        </div>
+
+        <!-- Step 1: Account -->
+        <div id="stepAccount" class="checkout-step-panel">
+          <div class="form-section">
+            <h2 class="form-section-title">Account details</h2>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">First Name</label>
+                <input type="text" class="form-input" id="firstName" placeholder="John" autocomplete="given-name">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Last Name</label>
+                <input type="text" class="form-input" id="lastName" placeholder="Doe" autocomplete="family-name">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input type="email" class="form-input" id="checkoutEmail" placeholder="you@example.com" autocomplete="email">
+            </div>
+            <div class="form-error" id="accountError" style="display:none;"></div>
+            <button class="btn btn-primary btn-full checkout-btn" onclick="goToPayment()">
+              Continue to Payment
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: Payment -->
+        <div id="stepPayment" class="checkout-step-panel" style="display:none;">
+          <div class="form-section">
+            <h2 class="form-section-title">Payment details</h2>
+
+            <div class="card-brands">
+              <div class="card-brand">
+                <svg viewBox="0 0 48 48" width="36" height="24"><rect width="48" height="48" rx="6" fill="#1A1F71"/><rect y="14" width="48" height="8" fill="#F7B600"/><text x="6" y="34" fill="white" font-size="11" font-weight="bold" font-family="Arial">VISA</text></svg>
+              </div>
+              <div class="card-brand">
+                <svg viewBox="0 0 48 48" width="36" height="24"><rect width="48" height="48" rx="6" fill="#252525"/><circle cx="19" cy="24" r="10" fill="#EB001B"/><circle cx="29" cy="24" r="10" fill="#F79E1B"/><path d="M24 16.3A10 10 0 0 1 29 24a10 10 0 0 1-5 7.7A10 10 0 0 1 19 24a10 10 0 0 1 5-7.7z" fill="#FF5F00"/></svg>
+              </div>
+              <div class="card-brand">
+                <svg viewBox="0 0 48 48" width="36" height="24"><rect width="48" height="48" rx="6" fill="#016FD0"/><text x="4" y="30" fill="white" font-size="9" font-weight="bold" font-family="Arial">AMERICAN</text><text x="4" y="40" fill="white" font-size="9" font-weight="bold" font-family="Arial">EXPRESS</text></svg>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Cardholder Name</label>
+              <input type="text" class="form-input" id="cardName" placeholder="John Doe" autocomplete="cc-name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Card Number</label>
+              <div class="card-input-wrap">
+                <input type="text" class="form-input" id="cardNumber" placeholder="1234 5678 9012 3456"
+                  maxlength="19" oninput="formatCardNumber(this)" autocomplete="cc-number">
+                <div class="card-type-icon" id="cardTypeIcon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Expiry Date</label>
+                <input type="text" class="form-input" id="cardExpiry" placeholder="MM / YY"
+                  maxlength="7" oninput="formatExpiry(this)" autocomplete="cc-exp">
+              </div>
+              <div class="form-group">
+                <label class="form-label">
+                  CVV
+                  <span class="cvv-tooltip" title="3 or 4 digit security code on the back of your card">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                  </span>
+                </label>
+                <input type="text" class="form-input" id="cardCvv" placeholder="123"
+                  maxlength="4" oninput="this.value=this.value.replace(/\D/g,'')" autocomplete="cc-csc">
+              </div>
+            </div>
+
+            <div class="form-error" id="paymentError" style="display:none;"></div>
+
+            <div class="secure-note">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Your payment is encrypted and secure. We never store your card details.
+            </div>
+
+            <div class="checkout-btn-row">
+              <button class="btn btn-ghost" onclick="goToAccount()">Back</button>
+              <button class="btn btn-primary checkout-btn" onclick="submitPayment()" id="payBtn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Pay <span id="payBtnAmount"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Success -->
+        <div id="stepSuccess" class="checkout-step-panel" style="display:none;">
+          <div class="success-panel">
+            <div class="success-icon">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h2 class="success-title">Payment successful!</h2>
+            <p class="success-desc">Welcome to <span id="successPlanName" class="gradient-text"></span>. Your plan is now active.</p>
+            <div class="success-details" id="successDetails"></div>
+            <div class="success-actions">
+              <a href="/pages/user-dashboard/index.html" class="btn btn-primary">Go to Dashboard</a>
+              <a href="/pages/explore/index.html" class="btn btn-ghost">Explore Gallery</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Order Summary -->
+      <div class="checkout-summary-col" id="orderSummary">
+        <div class="summary-card">
+          <h2 class="summary-title">Order Summary</h2>
+
+          <div class="summary-plan" id="summaryPlan">
+            <div class="summary-plan-icon" id="summaryIcon"></div>
+            <div>
+              <p class="summary-plan-name" id="summaryPlanName">Loading...</p>
+              <p class="summary-plan-billing" id="summaryBilling">—</p>
+            </div>
+          </div>
+
+          <div class="summary-features" id="summaryFeatures"></div>
+
+          <div class="summary-divider"></div>
+
+          <div class="summary-line">
+            <span>Subtotal</span>
+            <span id="summarySubtotal">—</span>
+          </div>
+          <div class="summary-line" id="discountLine" style="display:none;">
+            <span class="discount-label">Yearly discount (20%)</span>
+            <span class="discount-val" id="summaryDiscount">—</span>
+          </div>
+          <div class="summary-line summary-line-total">
+            <span>Total due today</span>
+            <span id="summaryTotal">—</span>
+          </div>
+
+          <div class="summary-divider"></div>
+
+          <div class="summary-guarantee">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span>30-day money-back guarantee</span>
+          </div>
+          <div class="summary-guarantee">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Cancel anytime, no questions asked</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script type="module" src="/shared/store.js"></script>
+  <script type="module" src="script.js"></script>
+</body>
+</html>

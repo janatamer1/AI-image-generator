@@ -26,6 +26,7 @@ export default defineConfig({
         "admin-users": resolve(__dirname, "pages/admin-users/index.html"),
         "admin-images": resolve(__dirname, "pages/admin-images/index.html"),
         explore: resolve(__dirname, "pages/explore/index.html"),
+        checkout: resolve(__dirname, "pages/checkout/index.html"),
       },
     },
   },
