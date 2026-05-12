@@ -59,7 +59,10 @@ function saveProfile() {
   document.getElementById('userBadge').textContent = name;
 
   successEl.style.display = 'block';
-  setTimeout(() => { successEl.style.display = 'none'; }, 3000);
+  setTimeout(() => {
+    successEl.style.display = 'none';
+    togglePasswordForm();
+  }, 2500);
 }
 
 function changePassword() {
@@ -200,8 +203,22 @@ function checkMatch() {
   }
 }
 
+function togglePasswordForm() {
+  const section = document.getElementById('passwordFormSection');
+  const btn = document.getElementById('togglePasswordBtn');
+  const isVisible = section.style.display !== 'none';
+  section.style.display = isVisible ? 'none' : 'block';
+  if (!isVisible) {
+    btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Cancel`;
+    document.getElementById('currentPassword').focus();
+  } else {
+    btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Change Password`;
+  }
+}
+
 window.saveProfile = saveProfile;
 window.changePassword = changePassword;
 window.toggleEye = toggleEye;
 window.updateStrength = updateStrength;
 window.checkMatch = checkMatch;
+window.togglePasswordForm = togglePasswordForm;
