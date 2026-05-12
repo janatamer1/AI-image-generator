@@ -106,6 +106,9 @@
   padding: 32px;
   min-height: 100vh;
   background: var(--bg-primary);
+  max-width: calc(100vw - 240px);
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .admin-topbar {
