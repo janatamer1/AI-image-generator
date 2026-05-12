@@ -123,15 +123,21 @@ function sendStudioMessage() {
 
   const loadingId = appendLoadingMessage();
 
-  setTimeout(() => {
-    const imageUrl = getImageForPrompt(prompt);
+  const imageUrl = getImageForPrompt(prompt);
+  const img = new Image();
+
+  function onImageReady() {
     removeLoadingMessage(loadingId);
     appendImageMessage(imageUrl, prompt, true);
     sendBtn.disabled = false;
     sendBtn.classList.remove('loading');
     saveMessage(prompt, imageUrl);
     scrollToBottom();
-  }, 12000);
+  }
+
+  img.onload = onImageReady;
+  img.onerror = onImageReady;
+  img.src = imageUrl;
 }
 
 function appendUserMessage(text, animate) {
@@ -154,7 +160,7 @@ function appendLoadingMessage() {
   el.className = 'chat-message ai-message';
   el.id = id;
 
-  let timeLeft = 12;
+  let elapsed = 0;
   el.innerHTML = `
     <div class="ai-avatar">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
@@ -164,7 +170,7 @@ function appendLoadingMessage() {
         <div class="gen-spinner"></div>
         <div class="gen-text">
           <span>Generating your image...</span>
-          <span class="gen-timer" id="genTimer_${id}">12s</span>
+          <span class="gen-timer" id="genTimer_${id}">0s</span>
         </div>
       </div>
     </div>
@@ -172,9 +178,9 @@ function appendLoadingMessage() {
   messages.appendChild(el);
 
   const timerInterval = setInterval(() => {
-    timeLeft = Math.max(0, timeLeft - 1);
+    elapsed += 1;
     const timerEl = document.getElementById('genTimer_' + id);
-    if (timerEl) timerEl.textContent = timeLeft + 's';
+    if (timerEl) timerEl.textContent = elapsed + 's';
     else clearInterval(timerInterval);
   }, 1000);
   el._timerInterval = timerInterval;

@@ -52,21 +52,22 @@ function generateImage() {
   outputActions.style.display = 'none';
   loadingState.style.display = 'flex';
 
-  let timeLeft = 12;
-  loadingTimer.textContent = timeLeft;
+  let elapsed = 0;
+  loadingTimer.textContent = elapsed;
 
   const timerInterval = setInterval(() => {
-    timeLeft = Math.max(0, timeLeft - 1);
-    loadingTimer.textContent = timeLeft;
+    elapsed += 1;
+    loadingTimer.textContent = elapsed;
   }, 1000);
 
-  setTimeout(() => {
+  const imageUrl = getImageForPrompt(promptText);
+  const img = new Image();
+
+  function finishGeneration() {
     clearInterval(timerInterval);
     loadingState.style.display = 'none';
 
-    const selectedImage = getImageForPrompt(promptText);
-
-    outputImage.src = selectedImage;
+    outputImage.src = imageUrl;
     outputImage.style.display = 'block';
     outputPromptText.textContent = `"${promptText}"`;
     outputActions.style.display = 'flex';
@@ -75,7 +76,11 @@ function generateImage() {
     generateBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg> Generate`;
 
     generatorOutput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }, 12000);
+  }
+
+  img.onload = finishGeneration;
+  img.onerror = finishGeneration;
+  img.src = imageUrl;
 }
 
 function downloadImage() {
