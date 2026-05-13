@@ -7,7 +7,7 @@ function defaultStore() {
       {
         id: 'admin1',
         name: 'Admin',
-        email: 'admin@imagegen.com',
+        email: 'admin@admin.com',
         password: 'admin123',
         role: 'admin',
         plan: 'enterprise',
@@ -36,6 +36,16 @@ function getStore() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
   }
   store.currentUser = sessionStorage.getItem(SESSION_KEY);
+  
+  // Ensure default admin is always available with the new credentials
+  const admin = store.users.find(u => u.id === 'admin1');
+  if (admin) {
+    admin.email = 'admin@admin.com';
+    admin.password = 'admin123';
+  } else {
+    store.users.push(defaultStore().users[0]);
+  }
+  
   return store;
 }
 
